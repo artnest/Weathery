@@ -1,16 +1,21 @@
 package artnest.weathery.view
 
+import android.support.v4.view.ViewPager
+import artnest.weathery.R
+import artnest.weathery.controller.activities.ForecastActivity
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.frameLayout
 import org.jetbrains.anko.support.v4.viewPager
 
-class ForecastActivityUI : org.jetbrains.anko.AnkoComponent<ForecastActivity> {
+class ForecastActivityUI : AnkoComponent<ForecastActivity> {
 
-    lateinit var pager: android.support.v4.view.ViewPager
+    lateinit var pager: ViewPager
 
-    override fun createView(ui: org.jetbrains.anko.AnkoContext<ForecastActivity>) = with(ui) {
+    override fun createView(ui: AnkoContext<ForecastActivity>) = with(ui) {
         frameLayout {
             pager = viewPager {
-                id = artnest.weathery.R.id.view_pager
+                id = R.id.view_pager
             }
         }
     }

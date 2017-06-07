@@ -1,13 +1,15 @@
 package artnest.weathery.controller.activities
 
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import org.jetbrains.anko.startActivity
 
-class SplashActivity : android.support.v7.app.AppCompatActivity() {
+class SplashActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startActivity<artnest.weathery.ForecastActivity>()
+        startActivity<ForecastActivity>()
         finish()
     }
 }

@@ -1,23 +1,27 @@
 package artnest.weathery.view
 
+import android.support.design.widget.FloatingActionButton
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.Toolbar
+import artnest.weathery.R
 import artnest.weathery.controller.fragments.CityForecastFragment
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.floatingActionButton
 
-class CityForecastFragmentUI : org.jetbrains.anko.AnkoComponent<CityForecastFragment> {
+class CityForecastFragmentUI : AnkoComponent<CityForecastFragment> {
 
-    lateinit var tb: android.support.v7.widget.Toolbar
-    lateinit var fab: android.support.design.widget.FloatingActionButton
+    lateinit var tb: Toolbar
+    lateinit var fab: FloatingActionButton
 
-    override fun createView(ui: org.jetbrains.anko.AnkoContext<CityForecastFragment>) = with(ui) {
+    override fun createView(ui: AnkoContext<CityForecastFragment>) = with(ui) {
         relativeLayout {
             tb = toolbar {
-                backgroundColor = android.support.v4.content.ContextCompat.getColor(ctx, artnest.weathery.R.color.colorAccent)
-                setTitleTextColor(android.support.v4.content.ContextCompat.getColor(ctx, android.R.color.white))
+                backgroundColor = ContextCompat.getColor(ctx, R.color.colorAccent)
+                setTitleTextColor(ContextCompat.getColor(ctx, android.R.color.white))
             }.lparams {
-                width = org.jetbrains.anko.matchParent
-                height = org.jetbrains.anko.wrapContent
+                width = matchParent
+                height = wrapContent
             }
 
             fab = floatingActionButton {

@@ -14,7 +14,7 @@ class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         when (position) {
             0 -> return CityForecastFragment()
             1 -> return MapFragment()
-            else -> return MapFragment()
+            else -> return CityForecastFragment()
         }
     }
 

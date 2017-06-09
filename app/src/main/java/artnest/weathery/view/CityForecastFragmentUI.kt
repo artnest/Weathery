@@ -21,6 +21,7 @@ class CityForecastFragmentUI : AnkoComponent<CityForecastFragment> {
 
     override fun createView(ui: AnkoContext<CityForecastFragment>) = with(ui) {
         relativeLayout {
+            // TODO extract toolbar_shadow -> include() into layout
             tb = toolbar {
                 backgroundColor = ContextCompat.getColor(ctx, R.color.colorAccent)
                 setTitleTextColor(ContextCompat.getColor(ctx, android.R.color.white))
@@ -32,6 +33,17 @@ class CityForecastFragmentUI : AnkoComponent<CityForecastFragment> {
                 height = wrapContent
             }
 
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                view {
+                    background = ContextCompat.getDrawable(ctx, R.drawable.shadow)
+                }.lparams {
+                    width = matchParent
+                    height = dip(4)
+                    bottomOf(tb)
+                }
+            }
+
+            // TODO extract layout -> customize()
             tv = textView {
                 text = "Test Weather"
                 gravity = Gravity.CENTER

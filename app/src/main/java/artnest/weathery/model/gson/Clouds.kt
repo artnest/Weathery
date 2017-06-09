@@ -1,4 +1,4 @@
-package artnest.weathery.model
+package artnest.weathery.model.gson
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,6 +1,6 @@
 package artnest.weathery.helpers
 
-import artnest.weathery.model.City
+import artnest.weathery.model.gson.ExtendedWeather
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -9,9 +9,9 @@ import retrofit2.http.Query
 
 interface OpenWeatherApiService {
 
-    @GET("/forecast")
+    @GET("forecast?")
     fun forecast(@Query("id") id: Int,
-                 @Query("appid") appid: String): Call<City>
+                 @Query("appid") appid: String): Call<ExtendedWeather>
 
     companion object Factory {
         val API_KEY: String

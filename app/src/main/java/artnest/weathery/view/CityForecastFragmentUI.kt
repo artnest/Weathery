@@ -5,6 +5,7 @@ import android.os.Build
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
+import android.view.Gravity
 import android.widget.TextView
 import artnest.weathery.R
 import artnest.weathery.controller.fragments.CityForecastFragment
@@ -24,7 +25,7 @@ class CityForecastFragmentUI : AnkoComponent<CityForecastFragment> {
                 backgroundColor = ContextCompat.getColor(ctx, R.color.colorAccent)
                 setTitleTextColor(ContextCompat.getColor(ctx, android.R.color.white))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    elevation = 4f
+                    elevation = 4 * ctx.resources.displayMetrics.density
                 }
             }.lparams {
                 width = matchParent
@@ -33,6 +34,7 @@ class CityForecastFragmentUI : AnkoComponent<CityForecastFragment> {
 
             tv = textView {
                 text = "Test Weather"
+                gravity = Gravity.CENTER
             }.lparams {
                 centerInParent()
             }

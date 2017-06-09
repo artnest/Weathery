@@ -3,15 +3,17 @@ package artnest.weathery.controller.fragments
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.App
-import artnest.weathery.model.City
+import artnest.weathery.helpers.OpenWeatherErrorResponse
 import artnest.weathery.view.CityForecastFragmentUI
+import co.metalab.asyncawait.RetrofitHttpError
+import co.metalab.asyncawait.async
+import co.metalab.asyncawait.awaitSuccessful
+import com.google.gson.Gson
 import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.support.v4.ctx
 
 class CityForecastFragment : Fragment() {
@@ -33,11 +35,22 @@ class CityForecastFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        var weather: City? = null
         async {
-            weather = App.openWeather.getForecast(625144).execute().body()
+            val weather = awaitSuccessful(App.openWeather.getForecast(625144))
+            cityForecastFragmentUI.tv.text = weather.city.name
+        }.onError {
+            val errorMessage = getErrorMessage(it.cause!!)
+            cityForecastFragmentUI.tv.text = errorMessage
         }
-        cityForecastFragmentUI.tv.text = weather?.name
-        Log.i("WEATHER_NAME", weather?.name ?: "Null")
     }
+
+    private fun getErrorMessage(it: Throwable) =
+            if (it is RetrofitHttpError) {
+                val httpErrorCode = it.errorResponse.code()
+                val errorResponse = Gson().fromJson(it.errorResponse.body().toString(),
+                        OpenWeatherErrorResponse::class.java)
+                "[$httpErrorCode] ${errorResponse.message}"
+            } else {
+                "Couldn't load forecast (${it.message})"
+            }
 }

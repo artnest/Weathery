@@ -45,46 +45,6 @@ class ForecastListFragment : Fragment() {
         }
     }
 
-    /*override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        activity.menuInflater.inflate(R.menu.menu, menu)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu?) {
-        super.onPrepareOptionsMenu(menu)
-
-        if (showAction) {
-            menu!!.findItem(R.id.action_view_list).isVisible = true
-            menu.findItem(R.id.action_view_cards).isVisible = false
-        } else {
-            menu!!.findItem(R.id.action_view_list).isVisible = false
-            menu.findItem(R.id.action_view_cards).isVisible = true
-        }
-    }
-
-    var showAction = true
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
-            R.id.action_refresh -> {
-                return true
-            }
-
-            R.id.action_view_list -> {
-                showAction = false
-                activity.supportInvalidateOptionsMenu()
-                return true
-            }
-
-            R.id.action_view_cards -> {
-                showAction = true
-                activity.supportInvalidateOptionsMenu()
-                return true
-            }
-
-            else -> return super.onOptionsItemSelected(item)
-        }
-    }*/
-
     private fun getErrorMessage(it: Throwable) =
             if (it is RetrofitHttpError) {
                 val httpErrorCode = it.errorResponse.code()

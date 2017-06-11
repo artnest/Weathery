@@ -8,18 +8,18 @@ import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.widget.TextView
 import artnest.weathery.R
-import artnest.weathery.controller.fragments.CityForecastFragment
+import artnest.weathery.controller.fragments.ForecastCardsFragment
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.floatingActionButton
 
-class CityForecastFragmentUI : AnkoComponent<CityForecastFragment> {
+class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
 
     lateinit var tb: Toolbar
     lateinit var fab: FloatingActionButton
     lateinit var tv: TextView
 
-    override fun createView(ui: AnkoContext<CityForecastFragment>) = with(ui) {
+    override fun createView(ui: AnkoContext<ForecastCardsFragment>) = with(ui) {
         relativeLayout {
             tb = toolbar {
                 id = R.id.toolbar
@@ -49,7 +49,7 @@ class CityForecastFragmentUI : AnkoComponent<CityForecastFragment> {
             }
 
             tv = textView {
-                text = "Test Weather"
+                text = "Test Weather Card"
                 gravity = Gravity.CENTER
             }.lparams {
                 centerInParent()

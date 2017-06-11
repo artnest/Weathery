@@ -2,6 +2,6 @@
 <resources>
     <item name="view_pager" type="id"/>
     <item name="toolbar" type="id"/>
-    <item name="toolbar_layout" type="id"/>
     <item name="floating_action_button" type="id"/>
+    <item name="child_fragment_container" type="id"/>
 </resources>

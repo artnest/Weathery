@@ -14,8 +14,7 @@ interface OpenWeatherApiService {
                  @Query("appid") appid: String): Call<ExtendedWeather>
 
     companion object Factory {
-        val API_KEY: String
-            get() = "808cd9ff7e6852f10bf2d5301497096d"
+        val API_KEY = "808cd9ff7e6852f10bf2d5301497096d"
 
         fun create(): OpenWeatherApiService {
             val retrofit = Retrofit.Builder()

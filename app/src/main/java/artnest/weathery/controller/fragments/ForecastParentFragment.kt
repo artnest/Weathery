@@ -2,8 +2,12 @@ package artnest.weathery.controller.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import artnest.weathery.R
+import artnest.weathery.controller.activities.ForecastActivity.Companion.showAction
 import artnest.weathery.view.ForecastParentFragmentUI
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.ctx
@@ -27,11 +31,11 @@ class ForecastParentFragment : Fragment() {
         // TODO retain state instance on orientation change (use SharedPreferences)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    /*override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         activity.menuInflater.inflate(R.menu.menu, menu)
-    }
+    }*/
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
+    /*override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
 
         if (showAction) {
@@ -41,9 +45,9 @@ class ForecastParentFragment : Fragment() {
             menu!!.findItem(R.id.action_view_list).isVisible = false
             menu.findItem(R.id.action_view_cards).isVisible = true
         }
-    }
+    }*/
 
-    var showAction = true
+//    var showAction = true
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {

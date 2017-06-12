@@ -15,18 +15,18 @@ import org.jetbrains.anko.support.v4.ctx
 
 class ForecastCardsFragment : Fragment() {
 
-    lateinit var mForecastCardsFragmentUI: ForecastCardsFragmentUI
+    lateinit var forecastCardsFragmentUI: ForecastCardsFragmentUI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mForecastCardsFragmentUI = ForecastCardsFragmentUI()
+        forecastCardsFragmentUI = ForecastCardsFragmentUI()
         setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val v = mForecastCardsFragmentUI.createView(AnkoContext.create(ctx, this))
-        (activity as AppCompatActivity).setSupportActionBar(mForecastCardsFragmentUI.tb)
+        val v = forecastCardsFragmentUI.createView(AnkoContext.create(ctx, this))
+        (activity as AppCompatActivity).setSupportActionBar(forecastCardsFragmentUI.tb)
         return v
     }
 
@@ -35,10 +35,10 @@ class ForecastCardsFragment : Fragment() {
 
         /*async {
             val weather = awaitSuccessful(App.openWeather.getForecast(625144))
-            mForecastCardsFragmentUI.tv.text = weather.city.name
+            forecastCardsFragmentUI.tv.text = weather.city.name
         }.onError {
             val errorMessage = getErrorMessage(it.cause!!)
-            mForecastCardsFragmentUI.tv.text = errorMessage
+            forecastCardsFragmentUI.tv.text = errorMessage
         }*/
     }
 

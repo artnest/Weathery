@@ -7,17 +7,27 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.R
-import artnest.weathery.controller.activities.ForecastActivity.Companion.showAction
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.ExtendedWeather
 import artnest.weathery.view.ForecastParentFragmentUI
+import co.metalab.asyncawait.RetrofitHttpError
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.ctx
 
 class ForecastParentFragment : Fragment() {
 
     companion object {
-        var mWeather: ExtendedWeather? = null
+        val WEATHER_DATA = "weather_data"
+        var mWeatherData: ExtendedWeather? = null
+
+        fun getErrorMessage(it: Throwable) =
+                if (it is RetrofitHttpError) {
+                    val httpErrorCode = it.errorResponse.code()
+                    val errorResponse = it.errorResponse.message()
+                    "[$httpErrorCode] $errorResponse"
+                } else {
+                    "Couldn't refresh forecast"
+                }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,14 +43,11 @@ class ForecastParentFragment : Fragment() {
         childFragmentManager.beginTransaction()
                 .replace(R.id.child_fragment_container,
                         if (WeatheryPrefs.forecastType == 0) {
-                            ForecastListFragment()
-                        }
-                        else {
-                            ForecastCardsFragment.newInstance(mWeather)
+                            ForecastListFragment.newInstance(mWeatherData)
+                        } else {
+                            ForecastCardsFragment.newInstance(mWeatherData)
                         })
                 .commit()
-
-        // TODO retain state instance on orientation change (use SharedPreferences)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -50,24 +57,24 @@ class ForecastParentFragment : Fragment() {
             }
 
             R.id.action_view_list -> {
-                showAction = false
                 WeatheryPrefs.forecastType = 1
                 activity.supportInvalidateOptionsMenu()
 
                 childFragmentManager.beginTransaction()
-                        .replace(R.id.child_fragment_container, ForecastCardsFragment())
+                        .replace(R.id.child_fragment_container,
+                                ForecastCardsFragment.newInstance(mWeatherData))
                         .commit()
 
                 return true
             }
 
             R.id.action_view_cards -> {
-                showAction = true
                 WeatheryPrefs.forecastType = 0
                 activity.supportInvalidateOptionsMenu()
 
                 childFragmentManager.beginTransaction()
-                        .replace(R.id.child_fragment_container, ForecastListFragment())
+                        .replace(R.id.child_fragment_container,
+                                ForecastListFragment.newInstance(mWeatherData))
                         .commit()
 
                 return true

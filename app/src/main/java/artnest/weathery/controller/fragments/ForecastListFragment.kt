@@ -7,13 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.App
-import artnest.weathery.helpers.OpenWeatherErrorResponse
+import artnest.weathery.model.data.Cities
+import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.ExtendedWeather
 import artnest.weathery.view.ForecastListFragmentUI
-import co.metalab.asyncawait.RetrofitHttpError
 import co.metalab.asyncawait.async
 import co.metalab.asyncawait.awaitSuccessful
-import com.google.gson.Gson
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.toast
@@ -23,6 +22,16 @@ class ForecastListFragment : Fragment() {
     private lateinit var forecastListFragmentUI: ForecastListFragmentUI
 
     private var mWeather: ExtendedWeather? = null
+
+    companion object {
+        fun newInstance(weather: ExtendedWeather?): ForecastListFragment {
+            return ForecastListFragment().apply {
+                arguments = Bundle(1).apply {
+                    putParcelable(ForecastParentFragment.WEATHER_DATA, weather)
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,26 +46,24 @@ class ForecastListFragment : Fragment() {
         return v
     }
 
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (arguments != null) {
+            mWeather = arguments.getParcelable<ExtendedWeather>(ForecastParentFragment.WEATHER_DATA)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
 
         async {
-            mWeather = awaitSuccessful(App.openWeather.getForecast(625144))
+//            mWeather = awaitSuccessful(App.openWeather.getForecast(Cities.Minsk.id))
+            mWeather = awaitSuccessful(App.openWeather.getForecast(Cities.values()[WeatheryPrefs.selectedCity].id))
+            ForecastParentFragment.mWeatherData = mWeather
             forecastListFragmentUI.tv.text = mWeather!!.city.name
         }.onError {
-            toast(getErrorMessage(it.cause!!))
+            toast(ForecastParentFragment.getErrorMessage(it.cause!!))
         }
-
-        ForecastParentFragment.mWeather = mWeather
     }
-
-    private fun getErrorMessage(it: Throwable) =
-            if (it is RetrofitHttpError) {
-                val httpErrorCode = it.errorResponse.code()
-                val errorResponse = Gson().fromJson(it.errorResponse.body().toString(),
-                        OpenWeatherErrorResponse::class.java)
-                "[$httpErrorCode] ${errorResponse.message}"
-            } else {
-                "Couldn't refresh forecast"
-            }
 }

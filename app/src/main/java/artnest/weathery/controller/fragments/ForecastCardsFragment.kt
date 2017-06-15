@@ -6,11 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import artnest.weathery.helpers.OpenWeatherErrorResponse
 import artnest.weathery.model.gson.ExtendedWeather
 import artnest.weathery.view.ForecastCardsFragmentUI
-import co.metalab.asyncawait.RetrofitHttpError
-import com.google.gson.Gson
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.ctx
 
@@ -21,12 +18,10 @@ class ForecastCardsFragment : Fragment() {
     private var mWeather: ExtendedWeather? = null
 
     companion object {
-        private val WEATHER_DATA = "weather_data"
-
         fun newInstance(weather: ExtendedWeather?): ForecastCardsFragment {
             return ForecastCardsFragment().apply {
                 arguments = Bundle(1).apply {
-                    putParcelable(WEATHER_DATA, weather)
+                    putParcelable(ForecastParentFragment.WEATHER_DATA, weather)
                 }
             }
         }
@@ -48,10 +43,9 @@ class ForecastCardsFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*if (arguments != null) {
-            mWeather = arguments.getParcelable<ExtendedWeather>(WEATHER_DATA)
-        }*/
-        mWeather = arguments.getParcelable<ExtendedWeather>(WEATHER_DATA)
+        if (arguments != null) {
+            mWeather = arguments.getParcelable<ExtendedWeather>(ForecastParentFragment.WEATHER_DATA)
+        }
     }
 
     override fun onResume() {
@@ -67,14 +61,4 @@ class ForecastCardsFragment : Fragment() {
             forecastCardsFragmentUI.tv.text = errorMessage
         }*/
     }
-
-    private fun getErrorMessage(it: Throwable) =
-            if (it is RetrofitHttpError) {
-                val httpErrorCode = it.errorResponse.code()
-                val errorResponse = Gson().fromJson(it.errorResponse.body().toString(),
-                        OpenWeatherErrorResponse::class.java)
-                "[$httpErrorCode] ${errorResponse.message}"
-            } else {
-                "Couldn't load forecast (${it.message})"
-            }
 }

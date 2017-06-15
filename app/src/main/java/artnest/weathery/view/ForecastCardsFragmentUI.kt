@@ -9,9 +9,12 @@ import android.view.Gravity
 import android.widget.TextView
 import artnest.weathery.R
 import artnest.weathery.controller.fragments.ForecastCardsFragment
+import artnest.weathery.model.data.Cities
+import artnest.weathery.model.data.WeatheryPrefs
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.floatingActionButton
+import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
 
@@ -59,6 +62,18 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
                 imageResource = R.drawable.ic_globe
                 backgroundTintList = ColorStateList.valueOf(
                         ContextCompat.getColor(ctx, R.color.colorPrimary))
+
+                onClick {
+                    val cities = mutableListOf<String>()
+                    Cities.values().toList().forEach { it ->
+                        cities.add(it.name)
+                    }
+
+                    ctx.selector("Forecast", cities) { d, i ->
+                        WeatheryPrefs.selectedCity = i
+                        toast("${cities[i]} has been selected")
+                    }
+                }
             }.lparams {
                 margin = dip(20)
                 alignParentBottom()

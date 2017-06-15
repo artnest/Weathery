@@ -4,4 +4,5 @@ import com.chibatching.kotpref.KotprefModel
 
 object WeatheryPrefs : KotprefModel() {
     var forecastType by intPref()
+    var selectedCity by intPref()
 }

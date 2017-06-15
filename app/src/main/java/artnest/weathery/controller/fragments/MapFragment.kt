@@ -10,7 +10,7 @@ import org.jetbrains.anko.support.v4.ctx
 
 class MapFragment : Fragment() {
 
-    lateinit var mapFragmentUI: MapFragmentUI
+    private lateinit var mapFragmentUI: MapFragmentUI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

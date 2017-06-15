@@ -1,6 +1,7 @@
 package artnest.weathery.model.gson
 
 import com.google.gson.annotations.SerializedName
+import io.mironov.smuggler.AutoParcelable
 
 data class ExtendedWeather(
         @SerializedName("city")
@@ -13,4 +14,4 @@ data class ExtendedWeather(
         val cnt: Int,
         @SerializedName("list")
         val weatherForecastElement: List<WeatherForecastElement> = arrayListOf<WeatherForecastElement>()
-)
+) : AutoParcelable

@@ -8,11 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.R
 import artnest.weathery.controller.activities.ForecastActivity.Companion.showAction
+import artnest.weathery.model.data.WeatheryPrefs
+import artnest.weathery.model.gson.ExtendedWeather
 import artnest.weathery.view.ForecastParentFragmentUI
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.ctx
 
 class ForecastParentFragment : Fragment() {
+
+    companion object {
+        var mWeather: ExtendedWeather? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,29 +31,17 @@ class ForecastParentFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         childFragmentManager.beginTransaction()
-                .replace(R.id.child_fragment_container, ForecastListFragment())
+                .replace(R.id.child_fragment_container,
+                        if (WeatheryPrefs.forecastType == 0) {
+                            ForecastListFragment()
+                        }
+                        else {
+                            ForecastCardsFragment.newInstance(mWeather)
+                        })
                 .commit()
 
         // TODO retain state instance on orientation change (use SharedPreferences)
     }
-
-    /*override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        activity.menuInflater.inflate(R.menu.menu, menu)
-    }*/
-
-    /*override fun onPrepareOptionsMenu(menu: Menu?) {
-        super.onPrepareOptionsMenu(menu)
-
-        if (showAction) {
-            menu!!.findItem(R.id.action_view_list).isVisible = true
-            menu.findItem(R.id.action_view_cards).isVisible = false
-        } else {
-            menu!!.findItem(R.id.action_view_list).isVisible = false
-            menu.findItem(R.id.action_view_cards).isVisible = true
-        }
-    }*/
-
-//    var showAction = true
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
@@ -57,6 +51,7 @@ class ForecastParentFragment : Fragment() {
 
             R.id.action_view_list -> {
                 showAction = false
+                WeatheryPrefs.forecastType = 1
                 activity.supportInvalidateOptionsMenu()
 
                 childFragmentManager.beginTransaction()
@@ -68,6 +63,7 @@ class ForecastParentFragment : Fragment() {
 
             R.id.action_view_cards -> {
                 showAction = true
+                WeatheryPrefs.forecastType = 0
                 activity.supportInvalidateOptionsMenu()
 
                 childFragmentManager.beginTransaction()

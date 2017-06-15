@@ -1,0 +1,7 @@
+package artnest.weathery.model.data
+
+import com.chibatching.kotpref.KotprefModel
+
+object WeatheryPrefs : KotprefModel() {
+    var forecastType by intPref()
+}

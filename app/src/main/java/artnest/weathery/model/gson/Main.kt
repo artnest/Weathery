@@ -1,6 +1,7 @@
 package artnest.weathery.model.gson
 
 import com.google.gson.annotations.SerializedName
+import io.mironov.smuggler.AutoParcelable
 
 data class Main(
         @SerializedName("temp")
@@ -19,4 +20,4 @@ data class Main(
         val humidity: Int,
         @SerializedName("temp_kf")
         val tempKf: Double
-)
+) : AutoParcelable

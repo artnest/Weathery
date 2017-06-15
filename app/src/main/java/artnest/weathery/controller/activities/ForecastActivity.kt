@@ -10,8 +10,8 @@ import org.jetbrains.anko.setContentView
 
 class ForecastActivity : AppCompatActivity() {
 
-    lateinit var forecastActivityUI: ForecastActivityUI
-    lateinit var viewPagerAdapter: ViewPagerAdapter
+    private lateinit var forecastActivityUI: ForecastActivityUI
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

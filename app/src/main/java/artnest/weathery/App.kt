@@ -9,8 +9,4 @@ class App : Application() {
     companion object {
         val openWeather: OpenWeather = OpenWeatherProvider.provideOpenWeather()
     }
-
-    override fun onCreate() {
-        super.onCreate()
-    }
 }

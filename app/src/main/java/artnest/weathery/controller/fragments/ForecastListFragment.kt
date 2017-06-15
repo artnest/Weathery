@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.App
 import artnest.weathery.helpers.OpenWeatherErrorResponse
+import artnest.weathery.model.gson.ExtendedWeather
 import artnest.weathery.view.ForecastListFragmentUI
 import co.metalab.asyncawait.RetrofitHttpError
 import co.metalab.asyncawait.async
@@ -15,10 +16,13 @@ import co.metalab.asyncawait.awaitSuccessful
 import com.google.gson.Gson
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.ctx
+import org.jetbrains.anko.support.v4.toast
 
 class ForecastListFragment : Fragment() {
 
-    lateinit var forecastListFragmentUI: ForecastListFragmentUI
+    private lateinit var forecastListFragmentUI: ForecastListFragmentUI
+
+    private var mWeather: ExtendedWeather? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +41,13 @@ class ForecastListFragment : Fragment() {
         super.onResume()
 
         async {
-            val weather = awaitSuccessful(App.openWeather.getForecast(625144))
-            forecastListFragmentUI.tv.text = weather.city.name
+            mWeather = awaitSuccessful(App.openWeather.getForecast(625144))
+            forecastListFragmentUI.tv.text = mWeather!!.city.name
         }.onError {
-            val errorMessage = getErrorMessage(it.cause!!)
-            forecastListFragmentUI.tv.text = errorMessage
+            toast(getErrorMessage(it.cause!!))
         }
+
+        ForecastParentFragment.mWeather = mWeather
     }
 
     private fun getErrorMessage(it: Throwable) =
@@ -52,6 +57,6 @@ class ForecastListFragment : Fragment() {
                         OpenWeatherErrorResponse::class.java)
                 "[$httpErrorCode] ${errorResponse.message}"
             } else {
-                "Couldn't load forecast (${it.message})"
+                "Couldn't refresh forecast"
             }
 }

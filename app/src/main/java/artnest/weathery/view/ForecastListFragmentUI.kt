@@ -6,7 +6,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
-import android.widget.TextView
+import android.widget.ListView
 import artnest.weathery.R
 import artnest.weathery.controller.fragments.ForecastListFragment
 import artnest.weathery.model.data.Cities
@@ -20,7 +20,7 @@ class ForecastListFragmentUI : AnkoComponent<ForecastListFragment> {
 
     lateinit var tb: Toolbar
     lateinit var fab: FloatingActionButton
-    lateinit var tv: TextView
+    lateinit var lv: ListView
 
     override fun createView(ui: AnkoContext<ForecastListFragment>) = with(ui) {
         relativeLayout {
@@ -51,11 +51,23 @@ class ForecastListFragmentUI : AnkoComponent<ForecastListFragment> {
                 }
             }
 
-            tv = textView {
-                text = "Test Weather"
+            lv = listView {
+                id = android.R.id.list
+            }.lparams {
+                width = matchParent
+                height = matchParent
+                bottomOf(tb)
+            }
+
+            textView {
+                id = android.R.id.empty
+                text = ctx.getString(R.string.empty)
+                textSize = sp(16).toFloat()
+                padding = dip(24)
                 gravity = Gravity.CENTER
             }.lparams {
-                centerInParent()
+                width = matchParent
+                height = matchParent
             }
 
             fab = floatingActionButton {

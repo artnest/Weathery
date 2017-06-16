@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import artnest.weathery.model.gson.ExtendedWeather
 import artnest.weathery.view.ForecastCardsFragmentUI
 import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.ctx
 
 class ForecastCardsFragment : Fragment() {
@@ -36,7 +37,7 @@ class ForecastCardsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val v = forecastCardsFragmentUI.createView(AnkoContext.create(ctx, this))
-        (activity as AppCompatActivity).setSupportActionBar(forecastCardsFragmentUI.tb)
+        (act as AppCompatActivity).setSupportActionBar(forecastCardsFragmentUI.tb)
         return v
     }
 

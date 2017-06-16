@@ -6,28 +6,25 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import artnest.weathery.App
 import artnest.weathery.R
+import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.ExtendedWeather
 import artnest.weathery.view.ForecastParentFragmentUI
 import co.metalab.asyncawait.RetrofitHttpError
+import co.metalab.asyncawait.async
+import co.metalab.asyncawait.awaitSuccessful
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.ctx
+import org.jetbrains.anko.support.v4.toast
 
 class ForecastParentFragment : Fragment() {
 
+    private var mWeatherData: ExtendedWeather? = null
+
     companion object {
         val WEATHER_DATA = "weather_data"
-        var mWeatherData: ExtendedWeather? = null
-
-        fun getErrorMessage(it: Throwable) =
-                if (it is RetrofitHttpError) {
-                    val httpErrorCode = it.errorResponse.code()
-                    val errorResponse = it.errorResponse.message()
-                    "[$httpErrorCode] $errorResponse"
-                } else {
-                    "Couldn't refresh forecast"
-                }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,4 +80,25 @@ class ForecastParentFragment : Fragment() {
             else -> return super.onOptionsItemSelected(item)
         }
     }
+
+    fun getWeatherData(): ExtendedWeather? {
+        var weather: ExtendedWeather? = null
+        async {
+            weather = awaitSuccessful(App.openWeather
+                    .getForecast(Cities.values()[WeatheryPrefs.selectedCity].id))
+            mWeatherData = weather
+        }.onError {
+            toast(getErrorMessage(it.cause!!))
+        }
+        return weather
+    }
+
+    private fun getErrorMessage(it: Throwable) =
+            if (it is RetrofitHttpError) {
+                val httpErrorCode = it.errorResponse.code()
+                val errorResponse = it.errorResponse.message()
+                "[$httpErrorCode] $errorResponse"
+            } else {
+                "Couldn't refresh forecast"
+            }
 }

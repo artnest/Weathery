@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.widget.ListView
 import artnest.weathery.R
+import artnest.weathery.adapters.ListViewAdapter
 import artnest.weathery.controller.fragments.ForecastListFragment
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
@@ -53,6 +54,7 @@ class ForecastListFragmentUI : AnkoComponent<ForecastListFragment> {
 
             lv = listView {
                 id = android.R.id.list
+                adapter = ListViewAdapter(owner)
             }.lparams {
                 width = matchParent
                 height = matchParent

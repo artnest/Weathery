@@ -93,7 +93,7 @@ class ForecastParentFragment : Fragment() {
         return weather
     }
 
-    private fun getErrorMessage(it: Throwable) =
+    fun getErrorMessage(it: Throwable) =
             if (it is RetrofitHttpError) {
                 val httpErrorCode = it.errorResponse.code()
                 val errorResponse = it.errorResponse.message()

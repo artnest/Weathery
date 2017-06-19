@@ -6,18 +6,11 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import artnest.weathery.App
-import artnest.weathery.adapters.ListViewAdapter
-import artnest.weathery.model.data.Cities
-import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.ExtendedWeather
 import artnest.weathery.view.ForecastListFragmentUI
-import co.metalab.asyncawait.async
-import co.metalab.asyncawait.awaitSuccessful
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.ctx
-import org.jetbrains.anko.support.v4.toast
 
 class ForecastListFragment : ListFragment() {
 
@@ -45,14 +38,14 @@ class ForecastListFragment : ListFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val v = forecastListFragmentUI.createView(AnkoContext.create(ctx, this))
         (act as AppCompatActivity).setSupportActionBar(forecastListFragmentUI.tb)
-        var weather: ExtendedWeather? = null
+        /*var weather: ExtendedWeather? = null
         async {
             weather = awaitSuccessful(App.openWeather
                     .getForecast(Cities.values()[WeatheryPrefs.selectedCity].id))
             forecastListFragmentUI.lv.adapter = ListViewAdapter(weather!!)
         }.onError {
             toast("err")
-        }
+        }*/
 //        forecastListFragmentUI.lv.adapter = ListViewAdapter(parentFragment as ForecastParentFragment)
         return v
     }

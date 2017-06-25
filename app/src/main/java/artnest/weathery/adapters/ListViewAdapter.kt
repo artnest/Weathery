@@ -4,16 +4,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import artnest.weathery.App
+import artnest.weathery.R
 import artnest.weathery.controller.fragments.ForecastListFragment
 import artnest.weathery.controller.fragments.ForecastParentFragment
+import artnest.weathery.helpers.Common
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.WeatherForecastElement
 import co.metalab.asyncawait.async
 import co.metalab.asyncawait.awaitSuccessful
+import com.squareup.picasso.Picasso
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
 
 class ListViewAdapter(val container: ForecastListFragment) : BaseAdapter() {
 
@@ -29,20 +31,32 @@ class ListViewAdapter(val container: ForecastListFragment) : BaseAdapter() {
         val item = weatherDayList[weatherDayList.size / 2]
 
         return with(parent!!.context) {
-            verticalLayout {
-
-                textView {
-                    text = "Temperature: ${item.dtTxt}"
+            relativeLayout {
+                val icon = imageView {
+                    id = R.id.icon_weather
+                    Picasso.with(ctx).load(Common.getImage(item.weather[0].icon)).into(this)
+                }.lparams {
+                    width = dip(64)
+                    height = dip(64)
+                    centerVertically()
                 }
 
-                textView {
-                    text = "Temperature: ${item.main.temp}"
-                }
-                textView {
-                    text = "Min temp: ${item.main.tempMin}"
-                }
-                textView {
-                    text = "Max temp: ${item.main.tempMax}"
+                verticalLayout {
+                    textView {
+                        text = "Date: ${item.dtTxt.substringBefore(" ")}"
+                    }
+
+                    textView {
+                        text = "Temperature: ${item.main.temp}"
+                    }
+                    textView {
+                        text = "Min temp: ${item.main.tempMin}"
+                    }
+                    textView {
+                        text = "Max temp: ${item.main.tempMax}"
+                    }
+                }.lparams {
+                    rightOf(icon)
                 }
             }
         }

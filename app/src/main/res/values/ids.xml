@@ -4,4 +4,5 @@
     <item name="toolbar" type="id"/>
     <item name="floating_action_button" type="id"/>
     <item name="child_fragment_container" type="id"/>
+    <item name="icon_weather" type="id"/>
 </resources>

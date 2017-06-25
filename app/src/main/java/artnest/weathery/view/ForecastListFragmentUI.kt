@@ -79,13 +79,14 @@ class ForecastListFragmentUI : AnkoComponent<ForecastListFragment> {
 
                 onClick {
                     val cities = mutableListOf<String>()
-                    Cities.values().toList().forEach { it ->
-                        cities.add(it.name)
+                    Cities.values().toList().forEach { c ->
+                        cities.add(c.name)
                     }
 
                     ctx.selector("Forecast", cities) { d, i ->
                         WeatheryPrefs.selectedCity = i
                         toast("${cities[i]} has been selected")
+                        (lv.adapter as ListViewAdapter).reload()
                     }
                 }
             }.lparams {

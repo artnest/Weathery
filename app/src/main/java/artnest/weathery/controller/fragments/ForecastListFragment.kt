@@ -16,7 +16,7 @@ class ForecastListFragment : ListFragment() {
 
     lateinit var forecastListFragmentUI: ForecastListFragmentUI
 
-    private var mWeather: ExtendedWeather? = null
+    var mWeather: ExtendedWeather? = null
 
     companion object {
         fun newInstance(weather: ExtendedWeather?): ForecastListFragment {
@@ -31,7 +31,9 @@ class ForecastListFragment : ListFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO check getting arguments ?
+        if (arguments != null) {
+            mWeather = arguments.getParcelable<ExtendedWeather>(ForecastParentFragment.WEATHER_DATA)
+        }
 
         forecastListFragmentUI = ForecastListFragmentUI()
         setHasOptionsMenu(true)
@@ -42,13 +44,5 @@ class ForecastListFragment : ListFragment() {
         (act as AppCompatActivity).setSupportActionBar(forecastListFragmentUI.tb)
 //        forecastListFragmentUI.lv.adapter = ListViewAdapter(parentFragment as ForecastParentFragment)
         return v
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        if (arguments != null) {
-            mWeather = arguments.getParcelable<ExtendedWeather>(ForecastParentFragment.WEATHER_DATA)
-        }
     }
 }

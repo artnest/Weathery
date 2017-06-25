@@ -18,7 +18,7 @@ import org.jetbrains.anko.support.v4.ctx
 
 class ForecastParentFragment : Fragment() {
 
-    private var mWeatherData: ExtendedWeather? = null
+    var mWeatherData: ExtendedWeather? = null
 
     companion object {
         val WEATHER_DATA = "weather_data"
@@ -56,11 +56,13 @@ class ForecastParentFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.action_refresh -> {
+                // TODO change to when(...) (fragment check)
                 if (WeatheryPrefs.forecastType == 0) {
                     ((childFragmentManager.findFragmentById(R.id.child_fragment_container) as ForecastListFragment).forecastListFragmentUI.lv.adapter as ListViewAdapter).reload()
                 } else {
                     // TODO ForecastCardsFragment
                 }
+
                 return true
             }
 

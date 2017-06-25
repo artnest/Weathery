@@ -20,10 +20,15 @@ import org.jetbrains.anko.support.v4.toast
 class ListViewAdapter(val container: ForecastListFragment) : BaseAdapter() {
 
     var weatherDays = emptyList<List<WeatherForecastElement>>()
-//    var list = weather.weatherForecastElement // TODO handle empty data list (null)
 
     init {
-        reload()
+        if (container.mWeather != null) {
+            weatherDays = (container.parentFragment as ForecastParentFragment).getWeatherDays(container.mWeather!!.weatherForecastElement)
+            container.forecastListFragmentUI.tb.title = Cities.values()[WeatheryPrefs.selectedCity].name
+            notifyDataSetChanged()
+        } else {
+            reload()
+        }
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -74,11 +79,11 @@ class ListViewAdapter(val container: ForecastListFragment) : BaseAdapter() {
 
     private fun getWeatherData() {
         async {
-            val list = awaitSuccessful(App.openWeather
+            val weather = awaitSuccessful(App.openWeather
                     .getForecast(Cities.values()[WeatheryPrefs.selectedCity].id))
-                    .weatherForecastElement
+            (container.parentFragment as ForecastParentFragment).mWeatherData = weather
 
-            weatherDays = (container.parentFragment as ForecastParentFragment).getWeatherDays(list)
+            weatherDays = (container.parentFragment as ForecastParentFragment).getWeatherDays(weather.weatherForecastElement)
             container.forecastListFragmentUI.tb.title = Cities.values()[WeatheryPrefs.selectedCity].name
             notifyDataSetChanged()
         }.onError {

@@ -11,7 +11,8 @@ interface OpenWeatherApiService {
 
     @GET("forecast?")
     fun forecast(@Query("id") id: Int,
-                 @Query("appid") appid: String): Call<ExtendedWeather>
+                 @Query("appid") appid: String,
+                 @Query("units") units: String = "metric"): Call<ExtendedWeather>
 
     companion object Factory {
         val API_KEY = "808cd9ff7e6852f10bf2d5301497096d"

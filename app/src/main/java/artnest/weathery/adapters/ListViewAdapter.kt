@@ -3,38 +3,37 @@ package artnest.weathery.adapters
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.LinearLayout
 import artnest.weathery.App
 import artnest.weathery.controller.fragments.ForecastListFragment
+import artnest.weathery.controller.fragments.ForecastParentFragment
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.WeatherForecastElement
 import co.metalab.asyncawait.async
 import co.metalab.asyncawait.awaitSuccessful
-import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
 
-//class ListViewAdapter(val container: ForecastParentFragment) : BaseAdapter() {
 class ListViewAdapter(val container: ForecastListFragment) : BaseAdapter() {
-//class ListViewAdapter(val weather: ExtendedWeather) : BaseAdapter() {
 
-    // TODO try to get data from parentFragment in async block in init()
-
-    //    var list = container.getWeatherData()!!.weatherForecastElement // TODO get data async ?
-    var list: List<WeatherForecastElement> = emptyList() // TODO get data async ?
+    var weatherDays = emptyList<List<WeatherForecastElement>>()
 //    var list = weather.weatherForecastElement // TODO handle empty data list (null)
 
     init {
-        getWeatherData()
+        reload()
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val item = getItem(position)
+        val weatherDayList = getItem(position)
+        val item = weatherDayList[weatherDayList.size / 2]
 
         return with(parent!!.context) {
-            linearLayout {
-                orientation = LinearLayout.HORIZONTAL
+            verticalLayout {
+
+                textView {
+                    text = "Temperature: ${item.dtTxt}"
+                }
 
                 textView {
                     text = "Temperature: ${item.main.temp}"
@@ -49,21 +48,27 @@ class ListViewAdapter(val container: ForecastListFragment) : BaseAdapter() {
         }
     }
 
-    override fun getItem(position: Int) = list[position]
+    override fun getItem(position: Int) = weatherDays[position]
 
-    override fun getItemId(position: Int) = getItem(position).dt.toLong()
+    override fun getItemId(position: Int) = weatherDays.indexOf(getItem(position)).toLong()
 
-    override fun getCount() = list.size
+    override fun getCount() = weatherDays.size
 
-    fun getWeatherData() {
+    fun reload() {
+        getWeatherData()
+    }
+
+    private fun getWeatherData() {
         async {
-            list = awaitSuccessful(App.openWeather
+            val list = awaitSuccessful(App.openWeather
                     .getForecast(Cities.values()[WeatheryPrefs.selectedCity].id))
                     .weatherForecastElement
+
+            weatherDays = (container.parentFragment as ForecastParentFragment).getWeatherDays(list)
+            container.forecastListFragmentUI.tb.title = Cities.values()[WeatheryPrefs.selectedCity].name
             notifyDataSetChanged()
         }.onError {
-//            container.toast(container.getErrorMessage(it.cause!!))
-            container.toast("Error")
+            container.toast(ForecastParentFragment.getErrorMessage(it.cause!!))
         }
     }
 }

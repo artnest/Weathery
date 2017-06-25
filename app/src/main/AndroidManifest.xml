@@ -21,7 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".controller.activities.ForecastActivity"/>
+        <activity
+            android:name=".controller.activities.ForecastActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
     </application>
 
 </manifest>

@@ -7,6 +7,12 @@ import artnest.weathery.helpers.OpenWeatherProvider
 class App : Application() {
 
     companion object {
-        val openWeather: OpenWeather = OpenWeatherProvider.provideOpenWeather()
+        lateinit var openWeather: OpenWeather
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        openWeather = OpenWeatherProvider.provideOpenWeather()
     }
 }

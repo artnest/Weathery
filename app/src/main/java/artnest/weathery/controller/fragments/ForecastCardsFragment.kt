@@ -14,7 +14,7 @@ import org.jetbrains.anko.support.v4.ctx
 
 class ForecastCardsFragment : Fragment() {
 
-    private lateinit var forecastCardsFragmentUI: ForecastCardsFragmentUI
+    lateinit var forecastCardsFragmentUI: ForecastCardsFragmentUI
 
     private var mWeather: ExtendedWeather? = null
 

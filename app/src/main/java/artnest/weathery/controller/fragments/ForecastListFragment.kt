@@ -14,7 +14,7 @@ import org.jetbrains.anko.support.v4.ctx
 
 class ForecastListFragment : ListFragment() {
 
-    private lateinit var forecastListFragmentUI: ForecastListFragmentUI
+    lateinit var forecastListFragmentUI: ForecastListFragmentUI
 
     private var mWeather: ExtendedWeather? = null
 
@@ -31,6 +31,8 @@ class ForecastListFragment : ListFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // TODO check getting arguments ?
+
         forecastListFragmentUI = ForecastListFragmentUI()
         setHasOptionsMenu(true)
     }
@@ -38,14 +40,6 @@ class ForecastListFragment : ListFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val v = forecastListFragmentUI.createView(AnkoContext.create(ctx, this))
         (act as AppCompatActivity).setSupportActionBar(forecastListFragmentUI.tb)
-        /*var weather: ExtendedWeather? = null
-        async {
-            weather = awaitSuccessful(App.openWeather
-                    .getForecast(Cities.values()[WeatheryPrefs.selectedCity].id))
-            forecastListFragmentUI.lv.adapter = ListViewAdapter(weather!!)
-        }.onError {
-            toast("err")
-        }*/
 //        forecastListFragmentUI.lv.adapter = ListViewAdapter(parentFragment as ForecastParentFragment)
         return v
     }

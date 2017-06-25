@@ -6,18 +6,15 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import artnest.weathery.App
 import artnest.weathery.R
-import artnest.weathery.model.data.Cities
+import artnest.weathery.adapters.ListViewAdapter
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.ExtendedWeather
+import artnest.weathery.model.gson.WeatherForecastElement
 import artnest.weathery.view.ForecastParentFragmentUI
 import co.metalab.asyncawait.RetrofitHttpError
-import co.metalab.asyncawait.async
-import co.metalab.asyncawait.awaitSuccessful
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.ctx
-import org.jetbrains.anko.support.v4.toast
 
 class ForecastParentFragment : Fragment() {
 
@@ -25,6 +22,15 @@ class ForecastParentFragment : Fragment() {
 
     companion object {
         val WEATHER_DATA = "weather_data"
+
+        fun getErrorMessage(it: Throwable) =
+                if (it is RetrofitHttpError) {
+                    val httpErrorCode = it.errorResponse.code()
+                    val errorResponse = it.errorResponse.message()
+                    "[$httpErrorCode] $errorResponse"
+                } else {
+                    "Couldn't refresh forecast"
+                }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +56,11 @@ class ForecastParentFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.action_refresh -> {
+                if (WeatheryPrefs.forecastType == 0) {
+                    ((childFragmentManager.findFragmentById(R.id.child_fragment_container) as ForecastListFragment).forecastListFragmentUI.lv.adapter as ListViewAdapter).reload()
+                } else {
+                    // TODO ForecastCardsFragment
+                }
                 return true
             }
 
@@ -81,24 +92,25 @@ class ForecastParentFragment : Fragment() {
         }
     }
 
-    fun getWeatherData(): ExtendedWeather? {
-        var weather: ExtendedWeather? = null
-        async {
-            weather = awaitSuccessful(App.openWeather
-                    .getForecast(Cities.values()[WeatheryPrefs.selectedCity].id))
-            mWeatherData = weather
-        }.onError {
-            toast(getErrorMessage(it.cause!!))
-        }
-        return weather
-    }
+    fun getWeatherDays(list: List<WeatherForecastElement>): List<List<WeatherForecastElement>> {
+        val weatherDaysList = mutableListOf<List<WeatherForecastElement>>()
 
-    fun getErrorMessage(it: Throwable) =
-            if (it is RetrofitHttpError) {
-                val httpErrorCode = it.errorResponse.code()
-                val errorResponse = it.errorResponse.message()
-                "[$httpErrorCode] $errorResponse"
+        var dateDay = list.first().dtTxt.substringBefore(" ")
+        var weatherDayWithHours = mutableListOf<WeatherForecastElement>()
+        for (weatherHour in list) {
+            if (weatherHour.dtTxt.substringBefore(" ") == dateDay) {
+                weatherDayWithHours.add(weatherHour)
+
+                if (weatherHour == list.last()) {
+                    weatherDaysList.add(weatherDayWithHours)
+                }
             } else {
-                "Couldn't refresh forecast"
+                weatherDaysList.add(weatherDayWithHours)
+                weatherDayWithHours = mutableListOf(weatherHour)
+                dateDay = weatherHour.dtTxt.substringBefore(" ")
             }
+        }
+
+        return weatherDaysList
+    }
 }

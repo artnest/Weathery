@@ -9,4 +9,10 @@
     <item name="forecast_clouds_data" type="id"/>
     <item name="temperature_tv" type="id"/>
     <item name="recycler_view" type="id"/>
+    <item name="forecast_card_date" type="id"/>
+    <item name="forecast_card_description" type="id"/>
+    <item name="forecast_card_temperature" type="id"/>
+    <item name="forecast_card_clouds" type="id"/>
+    <item name="forecast_card_pressure" type="id"/>
+    <item name="forecast_card_icon" type="id"/>
 </resources>

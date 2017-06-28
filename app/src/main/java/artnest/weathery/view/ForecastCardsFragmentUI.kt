@@ -4,9 +4,11 @@ import android.content.res.ColorStateList
 import android.os.Build
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import artnest.weathery.R
+import artnest.weathery.adapters.ForecastCardsViewAdapter
 import artnest.weathery.controller.fragments.ForecastCardsFragment
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
@@ -53,7 +55,13 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
 
             rv = recyclerView {
                 id = R.id.recycler_view
-
+                layoutManager = LinearLayoutManager(ctx)
+                setHasFixedSize(true)
+                adapter = ForecastCardsViewAdapter(owner)
+            }.lparams {
+                width = matchParent
+                height = matchParent
+                bottomOf(tb)
             }
 
             fab = floatingActionButton {

@@ -16,7 +16,7 @@ class ForecastCardsFragment : Fragment() {
 
     lateinit var forecastCardsFragmentUI: ForecastCardsFragmentUI
 
-    private var mWeather: ExtendedWeather? = null
+    var mWeather: ExtendedWeather? = null
 
     companion object {
         fun newInstance(weather: ExtendedWeather?): ForecastCardsFragment {
@@ -31,6 +31,10 @@ class ForecastCardsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (arguments != null) {
+            mWeather = arguments.getParcelable<ExtendedWeather>(ForecastParentFragment.WEATHER_DATA)
+        }
+
         forecastCardsFragmentUI = ForecastCardsFragmentUI()
         setHasOptionsMenu(true)
     }
@@ -39,27 +43,5 @@ class ForecastCardsFragment : Fragment() {
         val v = forecastCardsFragmentUI.createView(AnkoContext.create(ctx, this))
         (act as AppCompatActivity).setSupportActionBar(forecastCardsFragmentUI.tb)
         return v
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        if (arguments != null) {
-            mWeather = arguments.getParcelable<ExtendedWeather>(ForecastParentFragment.WEATHER_DATA)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        forecastCardsFragmentUI.tv.text = mWeather?.city?.name
-
-        /*async {
-            val weather = awaitSuccessful(App.openWeather.getForecast(625144))
-            forecastCardsFragmentUI.tv.text = weather.city.name
-        }.onError {
-            val errorMessage = getErrorMessage(it.cause!!)
-            forecastCardsFragmentUI.tv.text = errorMessage
-        }*/
     }
 }

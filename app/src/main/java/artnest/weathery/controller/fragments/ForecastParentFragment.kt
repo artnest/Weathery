@@ -66,7 +66,6 @@ class ForecastParentFragment : Fragment() {
                         // TODO reload recycler view
                     }
                 }
-
                 return true
             }
 
@@ -78,7 +77,6 @@ class ForecastParentFragment : Fragment() {
                         .replace(R.id.child_fragment_container,
                                 ForecastCardsFragment.newInstance(mWeatherData))
                         .commit()
-
                 return true
             }
 
@@ -90,7 +88,6 @@ class ForecastParentFragment : Fragment() {
                         .replace(R.id.child_fragment_container,
                                 ForecastListFragment.newInstance(mWeatherData))
                         .commit()
-
                 return true
             }
 

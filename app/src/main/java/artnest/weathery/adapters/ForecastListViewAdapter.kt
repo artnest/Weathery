@@ -42,7 +42,7 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
             relativeLayout {
                 padding = dip(8)
 
-                val icon = imageView {
+                imageView {
                     id = R.id.icon_weather
                     Picasso.with(ctx).load(Common.getImage(item.weather[0].icon)).into(this)
                 }.lparams {
@@ -99,7 +99,7 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
                     }
                 }.lparams {
                     leftMargin = dip(4)
-                    rightOf(icon)
+                    rightOf(R.id.icon_weather)
                 }
             }
         }

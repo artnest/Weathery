@@ -56,14 +56,15 @@ class ForecastParentFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.action_refresh -> {
-                // TODO change to when(...) (fragment check)
-                if (WeatheryPrefs.forecastType == 0) {
-                    ((childFragmentManager
-                            .findFragmentById(R.id.child_fragment_container) as ForecastListFragment)
-                            .forecastListFragmentUI.lv.adapter as ForecastListViewAdapter)
-                            .reload()
-                } else {
-                    // TODO ForecastCardsFragment
+                val fr = childFragmentManager.findFragmentById(R.id.child_fragment_container)
+                when (fr) {
+                    is ForecastListFragment -> {
+                        (fr.forecastListFragmentUI.lv.adapter as ForecastListViewAdapter).reload()
+                    }
+
+                    is ForecastCardsFragment -> {
+                        // TODO reload recycler view
+                    }
                 }
 
                 return true

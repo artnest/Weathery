@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.widget.ListView
 import artnest.weathery.R
-import artnest.weathery.adapters.ListViewAdapter
+import artnest.weathery.adapters.ForecastListViewAdapter
 import artnest.weathery.controller.fragments.ForecastListFragment
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
@@ -54,7 +54,7 @@ class ForecastListFragmentUI : AnkoComponent<ForecastListFragment> {
 
             lv = listView {
                 id = android.R.id.list
-                adapter = ListViewAdapter(owner)
+                adapter = ForecastListViewAdapter(owner)
             }.lparams {
                 width = matchParent
                 height = matchParent
@@ -64,7 +64,7 @@ class ForecastListFragmentUI : AnkoComponent<ForecastListFragment> {
             textView {
                 id = android.R.id.empty
                 text = ctx.getString(R.string.empty)
-                textSize = sp(16).toFloat()
+                textSize = 24f
                 padding = dip(24)
                 gravity = Gravity.CENTER
             }.lparams {
@@ -83,14 +83,14 @@ class ForecastListFragmentUI : AnkoComponent<ForecastListFragment> {
                         cities.add(c.name)
                     }
 
-                    ctx.selector("Forecast", cities) { d, i ->
+                    ctx.selector("Forecast", cities) { _, i ->
                         WeatheryPrefs.selectedCity = i
                         toast("${cities[i]} has been selected")
-                        (lv.adapter as ListViewAdapter).reload()
+                        (lv.adapter as ForecastListViewAdapter).reload()
                     }
                 }
             }.lparams {
-                margin = dip(20)
+                margin = dip(16)
                 alignParentBottom()
                 alignParentRight()
             }

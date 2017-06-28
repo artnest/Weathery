@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.R
-import artnest.weathery.adapters.ListViewAdapter
+import artnest.weathery.adapters.ForecastListViewAdapter
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.ExtendedWeather
 import artnest.weathery.model.gson.WeatherForecastElement
@@ -58,7 +58,10 @@ class ForecastParentFragment : Fragment() {
             R.id.action_refresh -> {
                 // TODO change to when(...) (fragment check)
                 if (WeatheryPrefs.forecastType == 0) {
-                    ((childFragmentManager.findFragmentById(R.id.child_fragment_container) as ForecastListFragment).forecastListFragmentUI.lv.adapter as ListViewAdapter).reload()
+                    ((childFragmentManager
+                            .findFragmentById(R.id.child_fragment_container) as ForecastListFragment)
+                            .forecastListFragmentUI.lv.adapter as ForecastListViewAdapter)
+                            .reload()
                 } else {
                     // TODO ForecastCardsFragment
                 }

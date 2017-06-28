@@ -4,9 +4,8 @@ import android.content.res.ColorStateList
 import android.os.Build
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.view.Gravity
-import android.widget.TextView
 import artnest.weathery.R
 import artnest.weathery.controller.fragments.ForecastCardsFragment
 import artnest.weathery.model.data.Cities
@@ -14,13 +13,14 @@ import artnest.weathery.model.data.WeatheryPrefs
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.floatingActionButton
+import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
 
     lateinit var tb: Toolbar
     lateinit var fab: FloatingActionButton
-    lateinit var tv: TextView
+    lateinit var rv: RecyclerView
 
     override fun createView(ui: AnkoContext<ForecastCardsFragment>) = with(ui) {
         relativeLayout {
@@ -51,11 +51,9 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
                 }
             }
 
-            tv = textView {
-                text = "Test Weather Card"
-                gravity = Gravity.CENTER
-            }.lparams {
-                centerInParent()
+            rv = recyclerView {
+                id = R.id.recycler_view
+
             }
 
             fab = floatingActionButton {
@@ -65,17 +63,17 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
 
                 onClick {
                     val cities = mutableListOf<String>()
-                    Cities.values().toList().forEach { it ->
-                        cities.add(it.name)
+                    Cities.values().toList().forEach { c ->
+                        cities.add(c.name)
                     }
 
-                    ctx.selector("Forecast", cities) { d, i ->
+                    ctx.selector("Forecast", cities) { _, i ->
                         WeatheryPrefs.selectedCity = i
                         toast("${cities[i]} has been selected")
                     }
                 }
             }.lparams {
-                margin = dip(20)
+                margin = dip(16)
                 alignParentBottom()
                 alignParentRight()
             }

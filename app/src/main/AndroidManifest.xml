@@ -24,6 +24,10 @@
         <activity
             android:name=".controller.activities.ForecastActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity
+            android:name=".controller.activities.ForecastDayActivity"
+            android:parentActivityName=".controller.activities.ForecastActivity">
+        </activity>
     </application>
 
 </manifest>

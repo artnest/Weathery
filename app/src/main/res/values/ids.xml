@@ -5,4 +5,8 @@
     <item name="floating_action_button" type="id"/>
     <item name="child_fragment_container" type="id"/>
     <item name="icon_weather" type="id"/>
+    <item name="forecast_main_data" type="id"/>
+    <item name="forecast_clouds_data" type="id"/>
+    <item name="temperature_tv" type="id"/>
+    <item name="recycler_view" type="id"/>
 </resources>

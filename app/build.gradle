@@ -4,7 +4,7 @@ apply plugin: 'io.mironov.smuggler'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "26.0.0"
 
     defaultConfig {
         applicationId "artnest.weathery"
@@ -57,6 +57,8 @@ dependencies {
 
     compile "com.chibatching.kotpref:kotpref:$kotpref_version"
     compile "com.chibatching.kotpref:initializer:$kotpref_version"
+
+    compile "com.github.hotchemi:khronos:0.9.0"
 }
 
 repositories {

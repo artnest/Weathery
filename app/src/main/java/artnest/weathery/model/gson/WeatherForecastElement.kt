@@ -15,9 +15,9 @@ data class WeatherForecastElement(
         @SerializedName("wind")
         val wind: Wind,
         @SerializedName("rain")
-        val rain: Rain,
+        val rain: Rain?,
         @SerializedName("snow")
-        val snow: Snow,
+        val snow: Snow?,
         @SerializedName("sys")
         val sys: Sys,
         @SerializedName("dt_txt")

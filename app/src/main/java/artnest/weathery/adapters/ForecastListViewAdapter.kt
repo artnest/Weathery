@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.LinearLayout
+import android.widget.TextView
 import artnest.weathery.App
 import artnest.weathery.R
 import artnest.weathery.controller.fragments.ForecastListFragment
@@ -58,13 +59,11 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
 
                         textView {
                             text = Common.getDate(item.dtTxt)
-                            textSize = 14f
                             setTypeface(typeface, Typeface.BOLD)
                         }
 
                         textView {
                             text = item.weather[0].description
-                            textSize = 14f
                             setTypeface(typeface, Typeface.ITALIC)
                         }.lparams {
                             leftMargin = dip(16)
@@ -74,7 +73,6 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
                     textView {
                         id = R.id.temperature_tv
                         text = Common.getTemperature(item.main.temp)
-                        textSize = 14f
                     }.lparams {
                         bottomOf(R.id.forecast_main_data)
                     }
@@ -85,12 +83,10 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
 
                         textView {
                             text = Common.getClouds(item.clouds.all)
-                            textSize = 14f
                         }
 
                         textView {
                             text = Common.getPressure(item.main.pressure)
-                            textSize = 14f
                         }.lparams {
                             leftMargin = dip(16)
                         }
@@ -100,6 +96,10 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
                 }.lparams {
                     leftMargin = dip(4)
                     rightOf(R.id.icon_weather)
+                }
+            }.applyRecursively { view ->
+                when (view) {
+                    is TextView -> view.textSize = 14f
                 }
             }
         }

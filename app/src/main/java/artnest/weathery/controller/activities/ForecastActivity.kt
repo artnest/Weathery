@@ -31,11 +31,11 @@ class ForecastActivity : AppCompatActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         if (WeatheryPrefs.forecastType == 0) {
-            menu!!.findItem(R.id.action_view_list).isVisible = true
-            menu.findItem(R.id.action_view_cards).isVisible = false
-        } else {
             menu!!.findItem(R.id.action_view_list).isVisible = false
             menu.findItem(R.id.action_view_cards).isVisible = true
+        } else {
+            menu!!.findItem(R.id.action_view_list).isVisible = true
+            menu.findItem(R.id.action_view_cards).isVisible = false
         }
         return true
     }

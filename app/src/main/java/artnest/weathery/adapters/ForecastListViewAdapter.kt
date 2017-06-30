@@ -11,12 +11,12 @@ import artnest.weathery.R
 import artnest.weathery.controller.fragments.ForecastListFragment
 import artnest.weathery.controller.fragments.ForecastParentFragment
 import artnest.weathery.helpers.Common
+import artnest.weathery.helpers.loadUrl
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.WeatherForecastElement
 import co.metalab.asyncawait.async
 import co.metalab.asyncawait.awaitSuccessful
-import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.toast
 
@@ -45,7 +45,7 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
 
                 imageView {
                     id = R.id.icon_weather
-                    Picasso.with(ctx).load(Common.getImage(item.weather[0].icon)).into(this)
+                    loadUrl(item.weather[0].icon)
                 }.lparams {
                     width = dip(64)
                     height = dip(64)

@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.R
+import artnest.weathery.adapters.ForecastCardsViewAdapter
 import artnest.weathery.adapters.ForecastListViewAdapter
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.ExtendedWeather
@@ -63,30 +64,30 @@ class ForecastParentFragment : Fragment() {
                     }
 
                     is ForecastCardsFragment -> {
-                        // TODO reload recycler view
+                        (fr.forecastCardsFragmentUI.rv.adapter as ForecastCardsViewAdapter).reload()
                     }
                 }
                 return true
             }
 
             R.id.action_view_list -> {
-                WeatheryPrefs.forecastType = 1
-                activity.supportInvalidateOptionsMenu()
-
-                childFragmentManager.beginTransaction()
-                        .replace(R.id.child_fragment_container,
-                                ForecastCardsFragment.newInstance(mWeatherData))
-                        .commit()
-                return true
-            }
-
-            R.id.action_view_cards -> {
                 WeatheryPrefs.forecastType = 0
                 activity.supportInvalidateOptionsMenu()
 
                 childFragmentManager.beginTransaction()
                         .replace(R.id.child_fragment_container,
                                 ForecastListFragment.newInstance(mWeatherData))
+                        .commit()
+                return true
+            }
+
+            R.id.action_view_cards -> {
+                WeatheryPrefs.forecastType = 1
+                activity.supportInvalidateOptionsMenu()
+
+                childFragmentManager.beginTransaction()
+                        .replace(R.id.child_fragment_container,
+                                ForecastCardsFragment.newInstance(mWeatherData))
                         .commit()
                 return true
             }

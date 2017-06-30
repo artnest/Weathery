@@ -11,12 +11,12 @@ import org.jetbrains.anko.find
 
 class ForecastCardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val icon: ImageView = itemView.find(R.id.forecast_card_icon)
-    val date: TextView = itemView.find(R.id.forecast_card_date)
-    val desc: TextView = itemView.find(R.id.forecast_card_description)
-    val temp: TextView = itemView.find(R.id.forecast_card_temperature)
-    val clouds: TextView = itemView.find(R.id.forecast_card_clouds)
-    val pressure: TextView = itemView.find(R.id.forecast_card_pressure)
+    val icon: ImageView = itemView.find(R.id.card_icon)
+    val date: TextView = itemView.find(R.id.card_date)
+    val desc: TextView = itemView.find(R.id.card_description)
+    val temp: TextView = itemView.find(R.id.card_temperature)
+    val clouds: TextView = itemView.find(R.id.card_clouds)
+    val pressure: TextView = itemView.find(R.id.card_pressure)
 
     fun bind(item: WeatherDay) {
         Picasso.with(icon.context).load(item.icon).into(icon)

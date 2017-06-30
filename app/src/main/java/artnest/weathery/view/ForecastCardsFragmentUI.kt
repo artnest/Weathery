@@ -78,6 +78,7 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
                     ctx.selector("Forecast", cities) { _, i ->
                         WeatheryPrefs.selectedCity = i
                         toast("${cities[i]} has been selected")
+                        (rv.adapter as ForecastCardsViewAdapter).reload()
                     }
                 }
             }.lparams {

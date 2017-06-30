@@ -3,18 +3,18 @@ package artnest.weathery.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import artnest.weathery.App
+import artnest.weathery.R
 import artnest.weathery.controller.fragments.ForecastCardsFragment
 import artnest.weathery.controller.fragments.ForecastParentFragment
 import artnest.weathery.helpers.Common
+import artnest.weathery.helpers.inflate
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatherDay
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.WeatherForecastElement
-import artnest.weathery.view.ForecastCardUI
 import artnest.weathery.view.ForecastCardViewHolder
 import co.metalab.asyncawait.async
 import co.metalab.asyncawait.awaitSuccessful
-import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.toast
 
 
@@ -34,9 +34,7 @@ class ForecastCardsViewAdapter(val fr: ForecastCardsFragment) : RecyclerView.Ada
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ForecastCardViewHolder(
-                    ForecastCardUI().createView(AnkoContext.create(parent.context, parent))
-            )
+            ForecastCardViewHolder(parent.inflate(R.layout.forecast_card))
 
     override fun onBindViewHolder(holder: ForecastCardViewHolder, position: Int) {
         val weatherDayList = weatherDays[position]

@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import artnest.weathery.R
 import artnest.weathery.model.data.WeatherDay
+import artnest.weathery.model.gson.WeatherForecastElement
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.find
 
@@ -18,12 +19,17 @@ class ForecastCardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     val clouds: TextView = itemView.find(R.id.card_clouds)
     val pressure: TextView = itemView.find(R.id.card_pressure)
 
-    fun bind(item: WeatherDay) {
+    fun bind(item: WeatherDay, itemList: List<WeatherForecastElement>,
+             listener: (List<WeatherForecastElement>) -> Unit) {
         Picasso.with(icon.context).load(item.icon).into(icon)
         date.text = item.dt
         desc.text = item.desc
         temp.text = item.temp
         clouds.text = item.clouds
         pressure.text = item.pressure
+
+        itemView.setOnClickListener {
+            listener(itemList)
+        }
     }
 }

@@ -18,7 +18,8 @@ import co.metalab.asyncawait.awaitSuccessful
 import org.jetbrains.anko.support.v4.toast
 
 
-class ForecastCardsViewAdapter(val fr: ForecastCardsFragment) : RecyclerView.Adapter<ForecastCardViewHolder>() {
+class ForecastCardsViewAdapter(val fr: ForecastCardsFragment,
+                               val listener: (List<WeatherForecastElement>) -> Unit) : RecyclerView.Adapter<ForecastCardViewHolder>() {
 
     var weatherDays = emptyList<List<WeatherForecastElement>>()
 
@@ -39,7 +40,7 @@ class ForecastCardsViewAdapter(val fr: ForecastCardsFragment) : RecyclerView.Ada
     override fun onBindViewHolder(holder: ForecastCardViewHolder, position: Int) {
         val weatherDayList = weatherDays[position]
         val item = weatherDayList[weatherDayList.size / 2]
-        holder.bind(getWeatherDay(item))
+        holder.bind(getWeatherDay(item), weatherDayList, listener)
     }
 
     override fun getItemCount() = weatherDays.size

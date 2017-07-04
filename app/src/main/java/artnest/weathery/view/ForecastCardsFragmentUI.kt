@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import artnest.weathery.R
 import artnest.weathery.adapters.ForecastCardsViewAdapter
+import artnest.weathery.controller.activities.ForecastDayActivity
 import artnest.weathery.controller.fragments.ForecastCardsFragment
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
@@ -57,7 +58,9 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
                 id = R.id.recycler_view
                 layoutManager = LinearLayoutManager(ctx)
                 setHasFixedSize(true)
-                adapter = ForecastCardsViewAdapter(owner)
+                adapter = ForecastCardsViewAdapter(owner) {
+                    startActivity<ForecastDayActivity>(ForecastDayActivity.WEATHER_HOURS_DATA to it)
+                }
             }.lparams {
                 width = matchParent
                 height = matchParent

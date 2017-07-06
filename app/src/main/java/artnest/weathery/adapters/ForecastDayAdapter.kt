@@ -6,10 +6,10 @@ import android.widget.BaseAdapter
 import artnest.weathery.R
 import artnest.weathery.controller.activities.ForecastDayActivity
 import artnest.weathery.helpers.Common
-import com.squareup.picasso.Picasso
+import artnest.weathery.helpers.loadUrl
 import org.jetbrains.anko.*
 
-class ForecastDayListViewAdapter(fact: ForecastDayActivity) : BaseAdapter() {
+class ForecastDayAdapter(fact: ForecastDayActivity) : BaseAdapter() {
 
     val weatherHours = fact.mWeatherHoursList
 
@@ -18,9 +18,11 @@ class ForecastDayListViewAdapter(fact: ForecastDayActivity) : BaseAdapter() {
 
         return with(parent!!.context) {
             relativeLayout {
+                padding = dip(8)
+
                 val icon = imageView {
                     id = R.id.icon_weather
-                    Picasso.with(ctx).load(Common.getImage(item.weather[0].icon)).into(this)
+                    loadUrl(Common.getImage(item.weather[0].icon))
                 }.lparams {
                     width = dip(64)
                     height = dip(64)

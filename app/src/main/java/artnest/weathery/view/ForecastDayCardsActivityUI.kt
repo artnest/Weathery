@@ -1,31 +1,23 @@
 package artnest.weathery.view
 
-import android.content.res.ColorStateList
 import android.os.Build
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import artnest.weathery.R
-import artnest.weathery.adapters.ForecastCardsViewAdapter
+import artnest.weathery.adapters.ForecastDayCardsAdapter
 import artnest.weathery.controller.activities.ForecastDayCardsActivity
-import artnest.weathery.controller.fragments.ForecastCardsFragment
-import artnest.weathery.model.data.Cities
-import artnest.weathery.model.data.WeatheryPrefs
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.design.floatingActionButton
 import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.sdk25.coroutines.onClick
 
-class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
+class ForecastDayCardsActivityUI : AnkoComponent<ForecastDayCardsActivity> {
 
     lateinit var tb: Toolbar
-    lateinit var fab: FloatingActionButton
     lateinit var rv: RecyclerView
 
-    override fun createView(ui: AnkoContext<ForecastCardsFragment>) = with(ui) {
+    override fun createView(ui: AnkoContext<ForecastDayCardsActivity>) = with(ui) {
         relativeLayout {
             tb = toolbar {
                 id = R.id.toolbar
@@ -56,40 +48,17 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
 
             rv = recyclerView {
                 id = R.id.recycler_view
-                layoutManager = LinearLayoutManager(ctx)
-                setHasFixedSize(true)
-                adapter = ForecastCardsViewAdapter(owner) {
-                    startActivity<ForecastDayCardsActivity>(
-                            ForecastDayCardsActivity.WEATHER_HOURS_DATA to it
-                    )
+                if (configuration.portrait) {
+                    layoutManager = GridLayoutManager(ctx, 2)
+                } else {
+                    layoutManager = GridLayoutManager(ctx, 3)
                 }
+                setHasFixedSize(true)
+                adapter = ForecastDayCardsAdapter(owner)
             }.lparams {
                 width = matchParent
                 height = matchParent
                 bottomOf(tb)
-            }
-
-            fab = floatingActionButton {
-                imageResource = R.drawable.ic_globe
-                backgroundTintList = ColorStateList.valueOf(
-                        ContextCompat.getColor(ctx, R.color.colorPrimary))
-
-                onClick {
-                    val cities = mutableListOf<String>()
-                    Cities.values().toList().forEach { c ->
-                        cities.add(c.name)
-                    }
-
-                    ctx.selector("Forecast", cities) { _, i ->
-                        WeatheryPrefs.selectedCity = i
-                        toast("${cities[i]} has been selected")
-                        (rv.adapter as ForecastCardsViewAdapter).reload()
-                    }
-                }
-            }.lparams {
-                margin = dip(16)
-                alignParentBottom()
-                alignParentRight()
             }
         }
     }

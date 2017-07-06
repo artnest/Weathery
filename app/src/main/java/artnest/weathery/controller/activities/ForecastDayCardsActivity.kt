@@ -6,12 +6,12 @@ import artnest.weathery.helpers.Common
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.WeatherForecastElement
-import artnest.weathery.view.ForecastDayActivityUI
+import artnest.weathery.view.ForecastDayCardsActivityUI
 import org.jetbrains.anko.setContentView
 
-class ForecastDayActivity : AppCompatActivity() {
+class ForecastDayCardsActivity : AppCompatActivity() {
 
-    lateinit var forecastDayActivityUI: ForecastDayActivityUI
+    lateinit var forecastDayCardsActivityUI: ForecastDayCardsActivityUI
     lateinit var mWeatherHoursList: List<WeatherForecastElement>
 
     companion object {
@@ -23,10 +23,10 @@ class ForecastDayActivity : AppCompatActivity() {
 
         mWeatherHoursList = intent.getParcelableArrayListExtra<WeatherForecastElement>(WEATHER_HOURS_DATA)
 
-        forecastDayActivityUI = ForecastDayActivityUI()
-        forecastDayActivityUI.setContentView(this)
+        forecastDayCardsActivityUI = ForecastDayCardsActivityUI()
+        forecastDayCardsActivityUI.setContentView(this)
 
-        setSupportActionBar(forecastDayActivityUI.tb)
+        setSupportActionBar(forecastDayCardsActivityUI.tb)
         supportActionBar!!.title = Cities.values()[WeatheryPrefs.selectedCity].name + ", " +
                 Common.getDate(mWeatherHoursList[0].dtTxt)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)

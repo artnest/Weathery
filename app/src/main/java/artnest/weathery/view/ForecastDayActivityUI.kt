@@ -5,7 +5,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.widget.ListView
 import artnest.weathery.R
-import artnest.weathery.adapters.ForecastDayListViewAdapter
+import artnest.weathery.adapters.ForecastDayAdapter
 import artnest.weathery.controller.activities.ForecastDayActivity
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
@@ -46,7 +46,7 @@ class ForecastDayActivityUI : AnkoComponent<ForecastDayActivity> {
 
             lv = listView {
                 id = android.R.id.list
-                adapter = ForecastDayListViewAdapter(owner)
+                adapter = ForecastDayAdapter(owner)
             }.lparams {
                 width = matchParent
                 height = matchParent

@@ -28,6 +28,10 @@
             android:name=".controller.activities.ForecastDayActivity"
             android:parentActivityName=".controller.activities.ForecastActivity">
         </activity>
+        <activity
+            android:name=".controller.activities.ForecastDayCardsActivity"
+            android:parentActivityName=".controller.activities.ForecastActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -13,8 +13,8 @@ class ForecastDetailsCardViewHolder(itemView: View) : RecyclerView.ViewHolder(it
 
     val date: TextView = itemView.find(R.id.card_date)
     val icon: ImageView = itemView.find(R.id.card_icon)
-    val desc: TextView = itemView.find(R.id.card_description)
     val temp: TextView = itemView.find(R.id.card_temperature)
+    val desc: TextView = itemView.find(R.id.card_description)
     val wind: TextView = itemView.find(R.id.card_wind)
     val clouds: TextView = itemView.find(R.id.card_clouds)
     val pressure: TextView = itemView.find(R.id.card_pressure)
@@ -25,8 +25,8 @@ class ForecastDetailsCardViewHolder(itemView: View) : RecyclerView.ViewHolder(it
     fun bind(item: WeatherDetails) {
         date.text = item.dt
         icon.loadUrl(item.icon)
-        desc.text = item.desc
         temp.text = item.temp
+        desc.text = item.desc
         wind.text = item.wind
         clouds.text = item.clouds
         pressure.text = item.pressure

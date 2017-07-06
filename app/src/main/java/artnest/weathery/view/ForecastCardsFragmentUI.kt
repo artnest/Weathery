@@ -7,10 +7,13 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.Gravity
+import android.widget.TextView
 import artnest.weathery.R
 import artnest.weathery.adapters.ForecastCardsViewAdapter
 import artnest.weathery.controller.activities.ForecastDayCardsActivity
 import artnest.weathery.controller.fragments.ForecastCardsFragment
+import artnest.weathery.controller.fragments.ForecastParentFragment
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
 import org.jetbrains.anko.*
@@ -24,6 +27,7 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
     lateinit var tb: Toolbar
     lateinit var fab: FloatingActionButton
     lateinit var rv: RecyclerView
+    lateinit var etv: TextView
 
     override fun createView(ui: AnkoContext<ForecastCardsFragment>) = with(ui) {
         relativeLayout {
@@ -60,6 +64,9 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
                 setHasFixedSize(true)
                 adapter = ForecastCardsViewAdapter(owner) {
                     startActivity<ForecastDayCardsActivity>(
+                            ForecastDayCardsActivity.CITY_NAME to
+                                    (owner.parentFragment as ForecastParentFragment)
+                                            .mWeatherData!!.city.name,
                             ForecastDayCardsActivity.WEATHER_HOURS_DATA to it
                     )
                 }
@@ -67,6 +74,16 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
                 width = matchParent
                 height = matchParent
                 bottomOf(tb)
+            }
+
+            etv = textView {
+                text = ctx.getString(R.string.empty)
+                textSize = 24f
+                padding = dip(24)
+                gravity = Gravity.CENTER
+            }.lparams {
+                width = matchParent
+                height = matchParent
             }
 
             fab = floatingActionButton {

@@ -1,12 +1,13 @@
 package artnest.weathery.adapters
 
+import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import artnest.weathery.R
 import artnest.weathery.controller.activities.ForecastDayActivity
-import artnest.weathery.helpers.Common
 import artnest.weathery.helpers.loadUrl
+import artnest.weathery.helpers.toWeatherDetails
 import org.jetbrains.anko.*
 
 class ForecastDayAdapter(fact: ForecastDayActivity) : BaseAdapter() {
@@ -14,37 +15,108 @@ class ForecastDayAdapter(fact: ForecastDayActivity) : BaseAdapter() {
     val weatherHours = fact.mWeatherHoursList
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val item = getItem(position)
+        val item = getItem(position).toWeatherDetails()
 
         return with(parent!!.context) {
             relativeLayout {
-                padding = dip(8)
+                padding = dip(10)
 
-                val icon = imageView {
-                    id = R.id.icon_weather
-                    loadUrl(Common.getImage(item.weather[0].icon))
+                relativeLayout {
+                    id = R.id.card_initial_data
+
+                    textView {
+                        text = item.dt
+                        textSize = 14f
+                    }.lparams {
+                        alignParentLeft()
+                        centerVertically()
+                        leftMargin = dip(8)
+                    }
+
+                    imageView {
+                        loadUrl(item.icon)
+                    }.lparams {
+                        width = dip(64)
+                        height = dip(64)
+                        alignParentRight()
+                        rightMargin = dip(8)
+                    }
                 }.lparams {
-                    width = dip(64)
-                    height = dip(64)
-                    centerVertically()
+                    width = matchParent
+                    height = wrapContent
                 }
 
-                verticalLayout {
-                    textView {
-                        text = "Date: ${item.dtTxt.substringBefore(" ")}"
-                    }
-
-                    textView {
-                        text = "Temperature: ${item.main.temp}"
-                    }
-                    textView {
-                        text = "Min temp: ${item.main.tempMin}"
-                    }
-                    textView {
-                        text = "Max temp: ${item.main.tempMax}"
-                    }
+                textView {
+                    id = R.id.card_temperature
+                    text = item.temp
+                    textSize = 14f
                 }.lparams {
-                    rightOf(icon)
+                    alignParentLeft()
+                    bottomOf(R.id.card_initial_data)
+                }
+
+                textView {
+                    id = R.id.card_description
+                    text = item.desc
+                    textSize = 14f
+                    setTypeface(typeface, Typeface.ITALIC)
+                }.lparams {
+                    alignParentRight()
+                    bottomOf(R.id.card_initial_data)
+                }
+
+                textView {
+                    id = R.id.card_wind
+                    text = item.wind
+                    textSize = 14f
+                }.lparams {
+                    alignParentLeft()
+                    bottomOf(R.id.card_temperature)
+                }
+
+                textView {
+                    id = R.id.card_clouds
+                    text = item.clouds
+                    textSize = 14f
+                }.lparams {
+                    alignParentRight()
+                    bottomOf(R.id.card_temperature)
+                }
+
+                textView {
+                    id = R.id.card_pressure
+                    text = item.pressure
+                    textSize = 14f
+                }.lparams {
+                    alignParentLeft()
+                    bottomOf(R.id.card_wind)
+                }
+
+                textView {
+                    id = R.id.card_humidity
+                    text = item.humidity
+                    textSize = 14f
+                }.lparams {
+                    alignParentLeft()
+                    bottomOf(R.id.card_pressure)
+                }
+
+                textView {
+                    id = R.id.card_rain
+                    text = item.rain
+                    textSize = 14f
+                }.lparams {
+                    alignParentLeft()
+                    bottomOf(R.id.card_humidity)
+                }
+
+                textView {
+                    id = R.id.card_snow
+                    text = item.snow
+                    textSize = 14f
+                }.lparams {
+                    alignParentLeft()
+                    bottomOf(R.id.card_rain)
                 }
             }
         }

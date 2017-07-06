@@ -42,6 +42,13 @@ class ForecastCardsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val v = forecastCardsFragmentUI.createView(AnkoContext.create(ctx, this))
         (act as AppCompatActivity).setSupportActionBar(forecastCardsFragmentUI.tb)
+        if (mWeather != null) {
+            forecastCardsFragmentUI.rv.visibility = View.VISIBLE
+            forecastCardsFragmentUI.etv.visibility = View.GONE
+        } else {
+            forecastCardsFragmentUI.rv.visibility = View.GONE
+            forecastCardsFragmentUI.etv.visibility = View.VISIBLE
+        }
         return v
     }
 }

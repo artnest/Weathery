@@ -1,15 +1,15 @@
 package artnest.weathery.adapters
 
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.App
 import artnest.weathery.R
 import artnest.weathery.controller.fragments.ForecastCardsFragment
 import artnest.weathery.controller.fragments.ForecastParentFragment
-import artnest.weathery.helpers.Common
 import artnest.weathery.helpers.inflate
+import artnest.weathery.helpers.toWeatherDay
 import artnest.weathery.model.data.Cities
-import artnest.weathery.model.data.WeatherDay
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.WeatherForecastElement
 import artnest.weathery.view.ForecastCardViewHolder
@@ -27,7 +27,7 @@ class ForecastCardsViewAdapter(val fr: ForecastCardsFragment,
         if (fr.mWeather != null) {
             weatherDays = (fr.parentFragment as ForecastParentFragment)
                     .getWeatherDays(fr.mWeather!!.weatherForecastElement)
-            fr.forecastCardsFragmentUI.tb.title = Cities.values()[WeatheryPrefs.selectedCity].name
+            fr.forecastCardsFragmentUI.tb.title = fr.mWeather!!.city.name
             notifyDataSetChanged()
         } else {
             reload()
@@ -40,7 +40,7 @@ class ForecastCardsViewAdapter(val fr: ForecastCardsFragment,
     override fun onBindViewHolder(holder: ForecastCardViewHolder, position: Int) {
         val weatherDayList = weatherDays[position]
         val item = weatherDayList[weatherDayList.size / 2]
-        holder.bind(getWeatherDay(item), weatherDayList, listener)
+        holder.bind(item.toWeatherDay(), weatherDayList, listener)
     }
 
     override fun getItemCount() = weatherDays.size
@@ -57,20 +57,12 @@ class ForecastCardsViewAdapter(val fr: ForecastCardsFragment,
 
             weatherDays = (fr.parentFragment as ForecastParentFragment)
                     .getWeatherDays(weather.weatherForecastElement)
-            fr.forecastCardsFragmentUI.tb.title = Cities.values()[WeatheryPrefs.selectedCity].name
+            fr.forecastCardsFragmentUI.tb.title = weather.city.name
+            fr.forecastCardsFragmentUI.rv.visibility = View.VISIBLE
+            fr.forecastCardsFragmentUI.etv.visibility = View.GONE
             notifyDataSetChanged()
         }.onError {
             fr.toast(ForecastParentFragment.getErrorMessage(it.cause!!))
         }
     }
-
-    private fun getWeatherDay(item: WeatherForecastElement) =
-            WeatherDay(
-                    Common.getImage(item.weather[0].icon),
-                    Common.getDate(item.dtTxt),
-                    item.weather[0].description,
-                    Common.getTemperature(item.main.temp),
-                    Common.getClouds(item.clouds.all),
-                    Common.getPressure(item.main.pressure)
-            )
 }

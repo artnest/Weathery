@@ -50,6 +50,8 @@ class ForecastListFragment : ListFragment() {
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         startActivity<ForecastDayActivity>(
+                ForecastDayActivity.CITY_NAME to
+                        (parentFragment as ForecastParentFragment).mWeatherData!!.city.name,
                 ForecastDayActivity.WEATHER_HOURS_DATA to listView!!.getItemAtPosition(position)
         )
     }

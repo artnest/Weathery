@@ -3,7 +3,7 @@ package artnest.weathery.view
 import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
-import android.widget.ListView
+import android.widget.GridView
 import artnest.weathery.R
 import artnest.weathery.adapters.ForecastDayAdapter
 import artnest.weathery.controller.activities.ForecastDayActivity
@@ -13,7 +13,7 @@ import org.jetbrains.anko.appcompat.v7.toolbar
 class ForecastDayActivityUI : AnkoComponent<ForecastDayActivity> {
 
     lateinit var tb: Toolbar
-    lateinit var lv: ListView
+    lateinit var gv: GridView
 
     override fun createView(ui: AnkoContext<ForecastDayActivity>) = with(ui) {
         relativeLayout {
@@ -44,9 +44,15 @@ class ForecastDayActivityUI : AnkoComponent<ForecastDayActivity> {
                 }
             }
 
-            lv = listView {
-                id = android.R.id.list
+            gv = gridView {
                 adapter = ForecastDayAdapter(owner)
+                if (configuration.portrait) {
+                    numColumns = 2
+                } else {
+                    numColumns = 3
+                }
+                verticalSpacing = 8
+                horizontalSpacing = 8
             }.lparams {
                 width = matchParent
                 height = matchParent

@@ -28,7 +28,7 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
         if (fr.mWeather != null) {
             weatherDays = (fr.parentFragment as ForecastParentFragment)
                     .getWeatherDays(fr.mWeather!!.weatherForecastElement)
-            fr.forecastListFragmentUI.tb.title = Cities.values()[WeatheryPrefs.selectedCity].name
+            fr.forecastListFragmentUI.tb.title = fr.mWeather!!.city.name
             notifyDataSetChanged()
         } else {
             reload()
@@ -45,7 +45,7 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
 
                 imageView {
                     id = R.id.icon_weather
-                    loadUrl(item.weather[0].icon)
+                    loadUrl(Common.getImage(item.weather[0].icon))
                 }.lparams {
                     width = dip(64)
                     height = dip(64)
@@ -123,7 +123,7 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
 
             weatherDays = (fr.parentFragment as ForecastParentFragment)
                     .getWeatherDays(weather.weatherForecastElement)
-            fr.forecastListFragmentUI.tb.title = Cities.values()[WeatheryPrefs.selectedCity].name
+            fr.forecastListFragmentUI.tb.title = weather.city.name
             notifyDataSetChanged()
         }.onError {
             fr.toast(ForecastParentFragment.getErrorMessage(it.cause!!))

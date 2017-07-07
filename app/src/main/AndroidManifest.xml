@@ -3,6 +3,9 @@
           package="artnest.weathery">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-feature android:name="android.hardware.location.gps"/>
 
     <application
         android:name=".App"
@@ -32,6 +35,10 @@
             android:name=".controller.activities.ForecastDayCardsActivity"
             android:parentActivityName=".controller.activities.ForecastActivity">
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCQse8eXGIl3GFfTBZ-bjjjN0ZJD2ontN4"/>
     </application>
 
 </manifest>

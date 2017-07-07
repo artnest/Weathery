@@ -6,6 +6,7 @@ buildscript {
     ext.anko_version = '0.10.1'
     ext.retrofit_version = '2.3.0'
     ext.kotpref_version = '2.1.1'
+    ext.play_services_version = '11.0.2'
 
     repositories {
         jcenter()

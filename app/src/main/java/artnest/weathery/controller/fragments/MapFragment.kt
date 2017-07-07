@@ -1,25 +1,28 @@
 package artnest.weathery.controller.fragments
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.R
+import artnest.weathery.adapters.MarkerAdapter
 import artnest.weathery.helpers.inflate
 import artnest.weathery.model.data.Cities
-import artnest.weathery.model.data.WeatheryPrefs
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.map_fragment.view.*
 import org.jetbrains.anko.support.v4.act
+import org.jetbrains.anko.support.v4.ctx
+import org.jetbrains.anko.support.v4.toast
 
-class MapFragment : Fragment() {
+class MapFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
 
     lateinit var mMapView: MapView
     private lateinit var mMap: GoogleMap
@@ -41,25 +44,7 @@ class MapFragment : Fragment() {
         mMapView.onResume()
 
         MapsInitializer.initialize(act.applicationContext)
-
-        mMapView.getMapAsync { googleMap ->
-            run {
-                mMap = googleMap
-                mMap.isMyLocationEnabled = true
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    markers.forEach { name, pos ->
-                        mMap.addMarker(MarkerOptions().position(pos).title(name))
-                    }
-                } else {
-                    markers.entries.forEach { e ->
-                        mMap.addMarker(MarkerOptions().position(e.value).title(e.key))
-                    }
-                }
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(markers[Cities.values()[WeatheryPrefs.selectedCity].name]))
-            }
-        }
-
+        mMapView.getMapAsync(this)
         return v
     }
 
@@ -81,5 +66,25 @@ class MapFragment : Fragment() {
     override fun onLowMemory() {
         super.onLowMemory()
         mMapView.onLowMemory()
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        mMap.isMyLocationEnabled = true  // TODO request permission
+
+        mMap.setOnMarkerClickListener(this)
+        mMap.setInfoWindowAdapter(MarkerAdapter(ctx))
+        markers.entries.forEach { e ->
+            mMap.addMarker(MarkerOptions().position(e.value).title(e.key))
+        }
+
+        // mMap.animateCamera(CameraUpdateFactory.newLatLng(markers[Cities.values()[WeatheryPrefs.selectedCity].name]))
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        marker.showInfoWindow()
+        toast("Marker ${marker.title} clicked")
+
+        return true
     }
 }

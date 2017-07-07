@@ -1,5 +1,6 @@
 package artnest.weathery.controller.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.R
 import artnest.weathery.helpers.inflate
+import artnest.weathery.model.data.Cities
+import artnest.weathery.model.data.WeatheryPrefs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -20,9 +23,14 @@ class MapFragment : Fragment() {
 
     lateinit var mMapView: MapView
     private lateinit var mMap: GoogleMap
+    private val markers = mutableMapOf<String, LatLng>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Cities.values().toList().forEach { c ->
+            markers.put(c.name, LatLng(c.lat, c.lon))
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -39,9 +47,16 @@ class MapFragment : Fragment() {
                 mMap = googleMap
                 mMap.isMyLocationEnabled = true
 
-                val sydney = LatLng(-34.0, 151.0)
-                mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    markers.forEach { name, pos ->
+                        mMap.addMarker(MarkerOptions().position(pos).title(name))
+                    }
+                } else {
+                    markers.entries.forEach { e ->
+                        mMap.addMarker(MarkerOptions().position(e.value).title(e.key))
+                    }
+                }
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(markers[Cities.values()[WeatheryPrefs.selectedCity].name]))
             }
         }
 

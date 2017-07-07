@@ -7,6 +7,7 @@ import artnest.weathery.App
 import artnest.weathery.R
 import artnest.weathery.controller.fragments.ForecastCardsFragment
 import artnest.weathery.controller.fragments.ForecastParentFragment
+import artnest.weathery.helpers.Common
 import artnest.weathery.helpers.inflate
 import artnest.weathery.helpers.toWeatherDay
 import artnest.weathery.model.data.Cities
@@ -62,7 +63,7 @@ class ForecastCardsViewAdapter(val fr: ForecastCardsFragment,
             fr.forecastCardsFragmentUI.etv.visibility = View.GONE
             notifyDataSetChanged()
         }.onError {
-            fr.toast(ForecastParentFragment.getErrorMessage(it.cause!!))
+            fr.toast(Common.getErrorMessage(it.cause!!))
         }
     }
 }

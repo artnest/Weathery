@@ -13,7 +13,6 @@ import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.ExtendedWeather
 import artnest.weathery.model.gson.WeatherForecastElement
 import artnest.weathery.view.ForecastParentFragmentUI
-import co.metalab.asyncawait.RetrofitHttpError
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.ctx
 
@@ -23,15 +22,6 @@ class ForecastParentFragment : Fragment() {
 
     companion object {
         val WEATHER_DATA = "weather_data"
-
-        fun getErrorMessage(it: Throwable) =
-                if (it is RetrofitHttpError) {
-                    val httpErrorCode = it.errorResponse.code()
-                    val errorResponse = it.errorResponse.message()
-                    "[$httpErrorCode] $errorResponse"
-                } else {
-                    "Couldn't refresh forecast"
-                }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

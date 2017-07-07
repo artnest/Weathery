@@ -5,10 +5,15 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import artnest.weathery.App
 import artnest.weathery.R
 import artnest.weathery.adapters.MarkerAdapter
+import artnest.weathery.helpers.Common
 import artnest.weathery.helpers.inflate
 import artnest.weathery.model.data.Cities
+import artnest.weathery.model.gson.CurrentWeather
+import co.metalab.asyncawait.async
+import co.metalab.asyncawait.awaitSuccessful
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.MapView
@@ -27,6 +32,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
     lateinit var mMapView: MapView
     private lateinit var mMap: GoogleMap
     private val markers = mutableMapOf<String, LatLng>()
+
+    companion object {
+        lateinit var mWeather: CurrentWeather
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,9 +91,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        marker.showInfoWindow()
-        toast("Marker ${marker.title} clicked")
-
+        async {
+            val weather = awaitSuccessful(App.openWeather
+                    .getCurrentForecast(Cities.valueOf(marker.title).id))
+            mWeather = weather
+            marker.showInfoWindow()
+        }.onError {
+            toast(Common.getErrorMessage(it.cause!!))
+        }
         return true
     }
 }

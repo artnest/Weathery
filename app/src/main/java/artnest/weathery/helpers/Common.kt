@@ -1,5 +1,6 @@
 package artnest.weathery.helpers
 
+import co.metalab.asyncawait.RetrofitHttpError
 import khronos.toDate
 import khronos.toString
 
@@ -14,4 +15,13 @@ object Common {
     fun getHumidity(humidity: Int) = "humidity: $humidity %"
     fun getRain(rain: Double?) = "rain: ${rain?.format(4) ?: "no rain"}"
     fun getSnow(snow: Double?) = "snow: ${snow?.format(4) ?: "no snow"}"
+
+    fun getErrorMessage(it: Throwable) =
+            if (it is RetrofitHttpError) {
+                val httpErrorCode = it.errorResponse.code()
+                val errorResponse = it.errorResponse.message()
+                "[$httpErrorCode] $errorResponse"
+            } else {
+                "Couldn't refresh forecast"
+            }
 }

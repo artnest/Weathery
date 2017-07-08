@@ -17,6 +17,8 @@ object Common {
     fun getHumidity(humidity: Int) = "humidity: $humidity %"
     fun getRain(rain: Double?) = "rain: ${rain?.format(4) ?: "no rain"}"
     fun getSnow(snow: Double?) = "snow: ${snow?.format(4) ?: "no snow"}"
+    fun getSunrise(timestamp: Long) = "sunrise: ${Common.unixTimestampToDateTime(timestamp)}"
+    fun getSunset(timestamp: Long) = "sunset: ${Common.unixTimestampToDateTime(timestamp)}"
 
     fun unixTimestampToDateTime(timestamp: Long): String {
         val d = Date()

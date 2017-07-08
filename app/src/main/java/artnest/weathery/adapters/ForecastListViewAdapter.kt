@@ -4,7 +4,6 @@ import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.LinearLayout
 import android.widget.TextView
 import artnest.weathery.App
 import artnest.weathery.R
@@ -45,58 +44,56 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
                 padding = dip(8)
 
                 imageView {
-                    id = R.id.icon_weather
+                    id = R.id.list_icon
                     loadUrl(item.icon)
                 }.lparams {
                     width = dip(64)
                     height = dip(64)
                     centerVertically()
+                    rightMargin = dip(16)
                 }
 
-                relativeLayout {
-                    linearLayout {
-                        id = R.id.forecast_main_data
-                        orientation = LinearLayout.HORIZONTAL
-
-                        textView {
-                            text = item.dt
-                            setTypeface(typeface, Typeface.BOLD)
-                        }
-
-                        textView {
-                            text = item.desc
-                            setTypeface(typeface, Typeface.ITALIC)
-                        }.lparams {
-                            leftMargin = dip(16)
-                        }
-                    }
-
-                    textView {
-                        id = R.id.temperature_tv
-                        text = item.temp
-                    }.lparams {
-                        bottomOf(R.id.forecast_main_data)
-                    }
-
-                    linearLayout {
-                        id = R.id.forecast_clouds_data
-                        orientation = LinearLayout.HORIZONTAL
-
-                        textView {
-                            text = item.clouds
-                        }
-
-                        textView {
-                            text = item.pressure
-                        }.lparams {
-                            leftMargin = dip(16)
-                        }
-                    }.lparams {
-                        bottomOf(R.id.temperature_tv)
-                    }
+                textView {
+                    id = R.id.list_date
+                    text = item.dt
+                    setTypeface(typeface, Typeface.BOLD)
                 }.lparams {
-                    leftMargin = dip(4)
-                    rightOf(R.id.icon_weather)
+                    alignParentTop()
+                    rightMargin = dip(16)
+                    rightOf(R.id.list_icon)
+                }
+
+                textView {
+                    id = R.id.list_desc
+                    text = item.desc
+                    setTypeface(typeface, Typeface.ITALIC)
+                }.lparams {
+                    rightOf(R.id.list_date)
+                }
+
+                textView {
+                    id = R.id.list_temperature
+                    text = item.temp
+                }.lparams {
+                    bottomOf(R.id.list_date)
+                    rightOf(R.id.list_icon)
+                }
+
+                textView {
+                    id = R.id.list_clouds
+                    text = item.clouds
+                }.lparams {
+                    bottomOf(R.id.list_temperature)
+                    rightMargin = dip(16)
+                    rightOf(R.id.list_icon)
+                }
+
+                textView {
+                    id = R.id.list_pressure
+                    text = item.pressure
+                }.lparams {
+                    bottomOf(R.id.list_temperature)
+                    rightOf(R.id.list_clouds)
                 }
             }.applyRecursively { view ->
                 when (view) {

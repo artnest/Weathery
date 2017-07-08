@@ -4,9 +4,25 @@
     <item name="toolbar" type="id"/>
     <item name="floating_action_button" type="id"/>
     <item name="child_fragment_container" type="id"/>
-    <item name="icon_weather" type="id"/>
-    <item name="forecast_main_data" type="id"/>
-    <item name="forecast_clouds_data" type="id"/>
-    <item name="temperature_tv" type="id"/>
+    <item name="list_icon" type="id"/>
+    <item name="list_date" type="id"/>
+    <item name="list_desc" type="id"/>
+    <item name="list_temperature" type="id"/>
+    <item name="list_clouds" type="id"/>
+    <item name="list_pressure" type="id"/>
     <item name="recycler_view" type="id"/>
+    <item name="info_city_name" type="id"/>
+    <item name="info_icon" type="id"/>
+    <item name="info_date" type="id"/>
+    <item name="info_description" type="id"/>
+    <item name="info_temperature" type="id"/>
+    <item name="info_sunrise" type="id"/>
+    <item name="info_sunset" type="id"/>
+    <item name="info_wind" type="id"/>
+    <item name="info_clouds" type="id"/>
+    <item name="info_pressure" type="id"/>
+    <item name="info_humidity" type="id"/>
+    <item name="info_rain" type="id"/>
+    <item name="info_snow" type="id"/>
+    <item name="info_main" type="id"/>
 </resources>

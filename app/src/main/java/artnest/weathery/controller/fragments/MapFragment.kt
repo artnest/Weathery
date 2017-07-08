@@ -95,6 +95,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
             val weather = awaitSuccessful(App.openWeather
                     .getCurrentForecast(Cities.valueOf(marker.title).id))
             mWeather = weather
+            // TODO fetch city picture
+            // TODO fetch weather and city picture in async
             marker.showInfoWindow()
         }.onError {
             toast(Common.getErrorMessage(it.cause!!))

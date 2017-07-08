@@ -1,6 +1,6 @@
 package artnest.weathery.model.data
 
-data class WeatherDay(
+data class WeatherInfo(
         val icon: String,
         val dt: String,
         val desc: String,

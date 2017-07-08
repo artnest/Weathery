@@ -12,6 +12,7 @@ import artnest.weathery.controller.fragments.ForecastListFragment
 import artnest.weathery.controller.fragments.ForecastParentFragment
 import artnest.weathery.helpers.Common
 import artnest.weathery.helpers.loadUrl
+import artnest.weathery.helpers.toWeatherInfo
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.WeatherForecastElement
@@ -37,7 +38,7 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val weatherDayList = getItem(position)
-        val item = weatherDayList[weatherDayList.size / 2]
+        val item = weatherDayList[weatherDayList.size / 2].toWeatherInfo()
 
         return with(parent!!.context) {
             relativeLayout {
@@ -45,7 +46,7 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
 
                 imageView {
                     id = R.id.icon_weather
-                    loadUrl(Common.getImage(item.weather[0].icon))
+                    loadUrl(item.icon)
                 }.lparams {
                     width = dip(64)
                     height = dip(64)
@@ -58,12 +59,12 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
                         orientation = LinearLayout.HORIZONTAL
 
                         textView {
-                            text = Common.getDate(item.dtTxt)
+                            text = item.dt
                             setTypeface(typeface, Typeface.BOLD)
                         }
 
                         textView {
-                            text = item.weather[0].description
+                            text = item.desc
                             setTypeface(typeface, Typeface.ITALIC)
                         }.lparams {
                             leftMargin = dip(16)
@@ -72,7 +73,7 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
 
                     textView {
                         id = R.id.temperature_tv
-                        text = Common.getTemperature(item.main.temp)
+                        text = item.temp
                     }.lparams {
                         bottomOf(R.id.forecast_main_data)
                     }
@@ -82,11 +83,11 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
                         orientation = LinearLayout.HORIZONTAL
 
                         textView {
-                            text = Common.getClouds(item.clouds.all)
+                            text = item.clouds
                         }
 
                         textView {
-                            text = Common.getPressure(item.main.pressure)
+                            text = item.pressure
                         }.lparams {
                             leftMargin = dip(16)
                         }

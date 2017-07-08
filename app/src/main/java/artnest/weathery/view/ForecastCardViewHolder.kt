@@ -6,7 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import artnest.weathery.R
 import artnest.weathery.helpers.loadUrl
-import artnest.weathery.model.data.WeatherDay
+import artnest.weathery.model.data.WeatherInfo
 import artnest.weathery.model.gson.WeatherForecastElement
 import org.jetbrains.anko.find
 
@@ -19,7 +19,7 @@ class ForecastCardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     val clouds: TextView = itemView.find(R.id.card_clouds)
     val pressure: TextView = itemView.find(R.id.card_pressure)
 
-    fun bind(item: WeatherDay, itemList: List<WeatherForecastElement>,
+    fun bind(item: WeatherInfo, itemList: List<WeatherForecastElement>,
              listener: (List<WeatherForecastElement>) -> Unit) {
         icon.loadUrl(item.icon)
         date.text = item.dt

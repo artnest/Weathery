@@ -3,6 +3,8 @@ package artnest.weathery.helpers
 import co.metalab.asyncawait.RetrofitHttpError
 import khronos.toDate
 import khronos.toString
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Common {
     fun getImage(icon: String) = "http://openweathermap.org/img/w/$icon.png"
@@ -15,6 +17,14 @@ object Common {
     fun getHumidity(humidity: Int) = "humidity: $humidity %"
     fun getRain(rain: Double?) = "rain: ${rain?.format(4) ?: "no rain"}"
     fun getSnow(snow: Double?) = "snow: ${snow?.format(4) ?: "no snow"}"
+
+    fun unixTimestampToDateTime(timestamp: Long): String {
+        val d = Date()
+        d.time = timestamp * 1000
+        val f = SimpleDateFormat("HH:mm")
+        f.timeZone = TimeZone.getDefault()
+        return f.format(d)
+    }
 
     fun getErrorMessage(it: Throwable) =
             if (it is RetrofitHttpError) {

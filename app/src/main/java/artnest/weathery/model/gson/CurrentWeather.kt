@@ -21,7 +21,7 @@ data class CurrentWeather(
         @SerializedName("snow")
         val snow: Snow?,
         @SerializedName("dt")
-        val dt: Int,
+        val dt: Long,
         @SerializedName("sys")
         val sys: SysCurrent,
         @SerializedName("id")

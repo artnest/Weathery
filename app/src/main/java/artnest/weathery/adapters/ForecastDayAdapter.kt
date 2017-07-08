@@ -7,7 +7,7 @@ import android.widget.BaseAdapter
 import artnest.weathery.R
 import artnest.weathery.controller.activities.ForecastDayActivity
 import artnest.weathery.helpers.loadUrl
-import artnest.weathery.helpers.toWeatherDetails
+import artnest.weathery.helpers.toWeatherInfoDetails
 import org.jetbrains.anko.*
 
 class ForecastDayAdapter(fact: ForecastDayActivity) : BaseAdapter() {
@@ -15,7 +15,7 @@ class ForecastDayAdapter(fact: ForecastDayActivity) : BaseAdapter() {
     val weatherHours = fact.mWeatherHoursList
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val item = getItem(position).toWeatherDetails()
+        val item = getItem(position).toWeatherInfoDetails()
 
         return with(parent!!.context) {
             relativeLayout {

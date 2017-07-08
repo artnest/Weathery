@@ -5,7 +5,7 @@ import io.mironov.smuggler.AutoParcelable
 
 data class WeatherForecastElement(
         @SerializedName("dt")
-        val dt: Int,
+        val dt: Long,
         @SerializedName("main")
         val main: Main,
         @SerializedName("weather")

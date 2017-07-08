@@ -9,7 +9,7 @@ import artnest.weathery.controller.fragments.ForecastCardsFragment
 import artnest.weathery.controller.fragments.ForecastParentFragment
 import artnest.weathery.helpers.Common
 import artnest.weathery.helpers.inflate
-import artnest.weathery.helpers.toWeatherDay
+import artnest.weathery.helpers.toWeatherInfo
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.model.gson.WeatherForecastElement
@@ -41,7 +41,7 @@ class ForecastCardsViewAdapter(val fr: ForecastCardsFragment,
     override fun onBindViewHolder(holder: ForecastCardViewHolder, position: Int) {
         val weatherDayList = weatherDays[position]
         val item = weatherDayList[weatherDayList.size / 2]
-        holder.bind(item.toWeatherDay(), weatherDayList, listener)
+        holder.bind(item.toWeatherInfo(), weatherDayList, listener)
     }
 
     override fun getItemCount() = weatherDays.size

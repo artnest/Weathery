@@ -1,43 +1,40 @@
 package artnest.weathery.controller.fragments
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import artnest.weathery.App
 import artnest.weathery.R
 import artnest.weathery.adapters.MarkerAdapter
-import artnest.weathery.controller.activities.ForecastActivity
 import artnest.weathery.helpers.Common
 import artnest.weathery.helpers.inflate
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.gson.Weather.CurrentWeather
-import co.metalab.asyncawait.async
-import co.metalab.asyncawait.awaitSuccessful
-import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.map_fragment.view.*
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.toast
 
-class MapFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
+class MapFragment : Fragment(), OnMapReadyCallback {
 
     lateinit var mMapView: MapView
     private lateinit var mMap: GoogleMap
     private val markers = mutableMapOf<String, LatLng>()
 
     lateinit var mWeather: CurrentWeather
-    lateinit var mBitmap: Bitmap
+    var mBitmap: Bitmap? = null
+
+    val REQUEST_IMAGE_CAPTURE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,8 +80,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         mMap = googleMap
         mMap.isMyLocationEnabled = true  // TODO request permission
 
-        mMap.setOnMarkerClickListener(this)
-        mMap.setInfoWindowAdapter(MarkerAdapter(ctx, this))
+        val markerAdapter = MarkerAdapter(this)
+        mMap.setOnMarkerClickListener(markerAdapter)
+        mMap.setInfoWindowAdapter(markerAdapter)
+        mMap.setOnInfoWindowClickListener(markerAdapter)
+        mMap.setOnInfoWindowLongClickListener(markerAdapter)
+        mMap.setOnInfoWindowCloseListener(markerAdapter)
         markers.entries.forEach { e ->
             mMap.addMarker(MarkerOptions().position(e.value).title(e.key))
         }
@@ -92,39 +93,22 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         // mMap.animateCamera(CameraUpdateFactory.newLatLng(markers[Cities.values()[WeatheryPrefs.selectedCity].name]))
     }
 
-    override fun onMarkerClick(marker: Marker): Boolean {
-        async {
-            val weather = awaitSuccessful(App.openWeather
-                    .getCurrentForecast(Cities.valueOf(marker.title).id))
-            mWeather = weather
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-            val places = awaitSuccessful(App.googlePlaces
-                    .getNearbyPlaces(marker.position.latitude, marker.position.longitude))
-            if (places.results.isNotEmpty()) {
-                await {
-                    val result = Places.GeoDataApi
-                            .getPlacePhotos((act as ForecastActivity)
-                                    .googleApiClient,
-                                    places.results[0].placeId)
-                            .await()
-
-                    if (result != null && result.status.isSuccess) {
-                        val photoMetadataBuffer = result.photoMetadata
-                        if (photoMetadataBuffer.count > 0) {
-                            val photo = photoMetadataBuffer[0]
-                            mBitmap = photo.getPhoto((act as ForecastActivity).googleApiClient)
-                                    .await()
-                                    .bitmap
+        when (requestCode) {
+            REQUEST_IMAGE_CAPTURE -> {
+                if (resultCode == RESULT_OK) {
+                    val storageDir = Common.getPicturesStorageDir(ctx)
+                    if (storageDir != null) {
+                        val photo = Common.getLastModifiedFile(storageDir)
+                        if (photo != null) {
+                            Common.saveScaledBitmap(photo.absolutePath)
                         }
-                        photoMetadataBuffer.release()
+                        toast("Photo was saved")
                     }
                 }
             }
-
-            marker.showInfoWindow()
-        }.onError {
-            toast(Common.getErrorMessage(it.cause!!))
         }
-        return true
     }
 }

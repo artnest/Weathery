@@ -1,24 +1,91 @@
 package artnest.weathery.adapters
 
-import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
+import android.os.Environment
+import android.provider.MediaStore
+import android.support.v4.content.FileProvider
 import android.view.View
+import artnest.weathery.App
 import artnest.weathery.R
+import artnest.weathery.controller.activities.ForecastActivity
 import artnest.weathery.controller.fragments.MapFragment
+import artnest.weathery.helpers.Common
 import artnest.weathery.helpers.loadUrl
 import artnest.weathery.helpers.toWeatherInfo
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
+import artnest.weathery.model.data.Cities
+import artnest.weathery.model.data.CurrentWeatherInfo
+import co.metalab.asyncawait.async
+import co.metalab.asyncawait.awaitSuccessful
+import com.google.android.gms.location.places.Places
+import com.google.android.gms.maps.GoogleMap.*
 import com.google.android.gms.maps.model.Marker
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.act
+import org.jetbrains.anko.support.v4.ctx
+import org.jetbrains.anko.support.v4.toast
+import java.io.File
+import java.io.IOException
 
-class MarkerAdapter(val ctx: Context, val owner: MapFragment) : InfoWindowAdapter {
+class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
+        InfoWindowAdapter,
+        OnInfoWindowClickListener,
+        OnInfoWindowLongClickListener,
+        OnInfoWindowCloseListener {
+
+    private lateinit var item: CurrentWeatherInfo
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        mapOwner.toast("Please wait, loading forecast...")
+
+        async {
+            val weather = awaitSuccessful(App.openWeather
+                    .getCurrentForecast(Cities.valueOf(marker.title).id))
+            mapOwner.mWeather = weather
+
+            if (marker.snippet == null) {
+                val places = awaitSuccessful(App.googlePlaces
+                        .getNearbyPlaces(marker.position.latitude, marker.position.longitude))
+                if (places.results.isNotEmpty()) {
+                    await {
+                        val result = Places.GeoDataApi
+                                .getPlacePhotos((mapOwner.act as ForecastActivity)
+                                        .googleApiClient,
+                                        places.results[0].placeId)
+                                .await()
+
+                        if ((result != null) and (result.status.isSuccess)) {
+                            val photoMetadataBuffer = result.photoMetadata
+                            if (photoMetadataBuffer.count > 0) {
+                                val photo = photoMetadataBuffer[0]
+                                mapOwner.mBitmap = photo
+                                        .getScaledPhoto(
+                                                (mapOwner.act as ForecastActivity).googleApiClient,
+                                                800, 600
+                                        )
+                                        .await()
+                                        .bitmap
+                            }
+                            photoMetadataBuffer.release()
+                        }
+                    }
+                }
+            }
+
+            marker.showInfoWindow()
+        }.onError {
+            mapOwner.toast(Common.getErrorMessage(it.cause!!))
+        }
+        return true
+    }
+
     override fun getInfoWindow(marker: Marker) = null
 
     override fun getInfoContents(marker: Marker): View? {
-        val item = owner.mWeather.toWeatherInfo()
+        item = mapOwner.mWeather.toWeatherInfo()
 
-        return with(ctx) {
+        return with(mapOwner.ctx) {
             relativeLayout {
                 padding = dip(8)
 
@@ -45,11 +112,16 @@ class MarkerAdapter(val ctx: Context, val owner: MapFragment) : InfoWindowAdapte
 
                 imageView {
                     id = R.id.info_photo
-                    if (owner.mBitmap != null) {
-                        imageBitmap = owner.mBitmap
+                    val cityPhoto = Common.getCityPhotoFile(this@with, marker.title)
+                    if (cityPhoto?.exists() ?: false) {
+                        imageBitmap = BitmapFactory.decodeFile(cityPhoto!!.absolutePath)
                     } else {
-                        imageBitmap = BitmapFactory
-                                .decodeResource(resources, R.drawable.empty_photo)
+                        if (mapOwner.mBitmap != null) {
+                            imageBitmap = mapOwner.mBitmap
+                        } else {
+                            imageBitmap = BitmapFactory
+                                    .decodeResource(resources, R.drawable.empty_photo)
+                        }
                     }
                 }.lparams {
                     centerHorizontally()
@@ -159,6 +231,74 @@ class MarkerAdapter(val ctx: Context, val owner: MapFragment) : InfoWindowAdapte
                 }.lparams {
                     bottomOf(R.id.info_rain)
                 }
+            }
+        }
+    }
+
+    override fun onInfoWindowClick(marker: Marker) {
+        with(mapOwner.ctx) {
+            alert {
+                title = item.name
+                message = getString(R.string.take_photo_message)
+
+                positiveButton(R.string.take_photo_positive_button) {
+                    val cityPhoto = Common.getCityPhotoFile(this@with, marker.title)
+                    if (cityPhoto?.exists() ?: false) {
+                        cityPhoto!!.delete()
+                    }
+                    marker.hideInfoWindow()
+                    dispatchTakePictureIntent(marker.title)
+                }
+
+                cancelButton {
+                }
+            }.show()
+        }
+    }
+
+    override fun onInfoWindowLongClick(marker: Marker) {
+        with(mapOwner.ctx) {
+            val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            val cityPhoto = File(storageDir, "${marker.title}.jpg")
+            if (cityPhoto.exists()) {
+                alert {
+                    title = item.name
+                    message = getString(R.string.remove_photo_message)
+
+                    positiveButton(getString(R.string.remove_photo_positive_button)) {
+                        cityPhoto.delete()
+                        marker.hideInfoWindow()
+                        toast("Your photo was removed")
+                    }
+
+                    cancelButton {
+                    }
+                }.show()
+            } else {
+                toast("No user's photo to remove")
+            }
+        }
+    }
+
+    override fun onInfoWindowClose(marker: Marker) {
+        mapOwner.mBitmap = null
+    }
+
+    fun dispatchTakePictureIntent(cityName: String) {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(mapOwner.ctx.packageManager) != null) {
+            var photoFile: File? = null
+            try {
+                photoFile = Common.createImageFile(mapOwner.ctx, cityName)
+            } catch (ex: IOException) {
+                mapOwner.toast("Could not save photo!")
+            }
+
+            if (photoFile != null) {
+                val authorities = mapOwner.ctx.packageName + ".fileprovider"
+                val photoUri = FileProvider.getUriForFile(mapOwner.ctx, authorities, photoFile)
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                mapOwner.startActivityForResult(takePictureIntent, mapOwner.REQUEST_IMAGE_CAPTURE)
             }
         }
     }

@@ -31,7 +31,7 @@ class ForecastCardsViewAdapter(val fr: ForecastCardsFragment,
             fr.forecastCardsFragmentUI.tb.title = fr.mWeather!!.city.name
             notifyDataSetChanged()
         } else {
-            reload()
+            getWeatherData()
         }
     }
 
@@ -47,6 +47,7 @@ class ForecastCardsViewAdapter(val fr: ForecastCardsFragment,
     override fun getItemCount() = weatherDays.size
 
     fun reload() {
+        fr.toast("Refreshing forecast...")
         getWeatherData()
     }
 

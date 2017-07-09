@@ -12,7 +12,7 @@ import artnest.weathery.helpers.inflate
 import artnest.weathery.helpers.toWeatherInfo
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.data.WeatheryPrefs
-import artnest.weathery.model.gson.WeatherForecastElement
+import artnest.weathery.model.gson.Weather.WeatherForecastElement
 import artnest.weathery.view.ForecastCardViewHolder
 import co.metalab.asyncawait.async
 import co.metalab.asyncawait.awaitSuccessful

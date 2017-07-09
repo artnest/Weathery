@@ -1,6 +1,7 @@
 package artnest.weathery.adapters
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.view.View
 import artnest.weathery.R
@@ -11,11 +12,11 @@ import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
 import com.google.android.gms.maps.model.Marker
 import org.jetbrains.anko.*
 
-class MarkerAdapter(val ctx: Context) : InfoWindowAdapter {
+class MarkerAdapter(val ctx: Context, val owner: MapFragment) : InfoWindowAdapter {
     override fun getInfoWindow(marker: Marker) = null
 
     override fun getInfoContents(marker: Marker): View? {
-        val item = MapFragment.mWeather.toWeatherInfo()
+        val item = owner.mWeather.toWeatherInfo()
 
         return with(ctx) {
             relativeLayout {
@@ -27,6 +28,7 @@ class MarkerAdapter(val ctx: Context) : InfoWindowAdapter {
                     textSize = 16f
                     setTypeface(typeface, Typeface.BOLD)
                 }.lparams {
+                    bottomOf(R.id.info)
                     centerHorizontally()
                 }
 
@@ -38,6 +40,20 @@ class MarkerAdapter(val ctx: Context) : InfoWindowAdapter {
                 }.lparams {
                     centerHorizontally()
                     bottomOf(R.id.info_city_name)
+                    bottomMargin = dip(4)
+                }
+
+                imageView {
+                    id = R.id.info_photo
+                    if (owner.mBitmap != null) {
+                        imageBitmap = owner.mBitmap
+                    } else {
+                        imageBitmap = BitmapFactory
+                                .decodeResource(resources, R.drawable.empty_photo)
+                    }
+                }.lparams {
+                    centerHorizontally()
+                    bottomOf(R.id.info_date)
                     bottomMargin = dip(4)
                 }
 
@@ -61,7 +77,6 @@ class MarkerAdapter(val ctx: Context) : InfoWindowAdapter {
                         setTypeface(typeface, Typeface.ITALIC)
                     }.lparams {
                         rightOf(R.id.info_icon)
-                        rightMargin = dip(16)
                     }
 
                     textView {
@@ -69,7 +84,8 @@ class MarkerAdapter(val ctx: Context) : InfoWindowAdapter {
                         text = item.temp
                         textSize = 14f
                     }.lparams {
-                        rightOf(R.id.info_description)
+                        bottomOf(R.id.info_description)
+                        rightOf(R.id.info_icon)
                     }
 
                     textView {
@@ -77,7 +93,7 @@ class MarkerAdapter(val ctx: Context) : InfoWindowAdapter {
                         text = item.sunrise
                         textSize = 14f
                     }.lparams {
-                        bottomOf(R.id.info_description)
+                        bottomOf(R.id.info_temperature)
                         rightOf(R.id.info_icon)
                         rightMargin = dip(16)
                     }
@@ -91,7 +107,7 @@ class MarkerAdapter(val ctx: Context) : InfoWindowAdapter {
                         rightOf(R.id.info_icon)
                     }
                 }.lparams {
-                    bottomOf(R.id.info_date)
+                    bottomOf(R.id.info_photo)
                 }
 
                 textView {

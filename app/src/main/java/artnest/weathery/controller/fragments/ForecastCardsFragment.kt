@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import artnest.weathery.model.gson.ExtendedWeather
+import artnest.weathery.model.gson.Weather.ExtendedWeather
 import artnest.weathery.view.ForecastCardsFragmentUI
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.act

@@ -3,7 +3,7 @@ package artnest.weathery.controller.activities
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import artnest.weathery.helpers.Common
-import artnest.weathery.model.gson.WeatherForecastElement
+import artnest.weathery.model.gson.Weather.WeatherForecastElement
 import artnest.weathery.view.ForecastDayCardsActivityUI
 import org.jetbrains.anko.setContentView
 

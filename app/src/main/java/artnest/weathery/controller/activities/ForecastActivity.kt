@@ -7,12 +7,17 @@ import artnest.weathery.R
 import artnest.weathery.adapters.ViewPagerAdapter
 import artnest.weathery.model.data.WeatheryPrefs
 import artnest.weathery.view.ForecastActivityUI
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
+import com.google.android.gms.location.places.Places
 import org.jetbrains.anko.setContentView
 
-class ForecastActivity : AppCompatActivity() {
+class ForecastActivity : AppCompatActivity(), OnConnectionFailedListener {
 
     private lateinit var forecastActivityUI: ForecastActivityUI
     private lateinit var viewPagerAdapter: ViewPagerAdapter
+    lateinit var googleApiClient: GoogleApiClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +27,13 @@ class ForecastActivity : AppCompatActivity() {
 
         viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
         forecastActivityUI.pager.adapter = viewPagerAdapter
+
+        googleApiClient = GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -38,5 +50,9 @@ class ForecastActivity : AppCompatActivity() {
             menu.findItem(R.id.action_view_cards).isVisible = false
         }
         return true
+    }
+
+    override fun onConnectionFailed(result: ConnectionResult) {
+        // toast("No Internet Connection")
     }
 }

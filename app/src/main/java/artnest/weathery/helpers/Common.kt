@@ -28,6 +28,8 @@ object Common {
         return f.format(d)
     }
 
+    fun getPlaceLocation(lan: Double, lon: Double) = "$lan,$lon"
+
     fun getErrorMessage(it: Throwable) =
             if (it is RetrofitHttpError) {
                 val httpErrorCode = it.errorResponse.code()

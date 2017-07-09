@@ -25,4 +25,5 @@
     <item name="info_rain" type="id"/>
     <item name="info_snow" type="id"/>
     <item name="info_main" type="id"/>
+    <item name="info_photo" type="id"/>
 </resources>

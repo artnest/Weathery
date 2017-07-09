@@ -10,8 +10,8 @@ import artnest.weathery.R
 import artnest.weathery.adapters.ForecastCardsViewAdapter
 import artnest.weathery.adapters.ForecastListViewAdapter
 import artnest.weathery.model.data.WeatheryPrefs
-import artnest.weathery.model.gson.ExtendedWeather
-import artnest.weathery.model.gson.WeatherForecastElement
+import artnest.weathery.model.gson.Weather.ExtendedWeather
+import artnest.weathery.model.gson.Weather.WeatherForecastElement
 import artnest.weathery.view.ForecastParentFragmentUI
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.ctx

@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import artnest.weathery.controller.activities.ForecastDayActivity
-import artnest.weathery.model.gson.ExtendedWeather
+import artnest.weathery.model.gson.Weather.ExtendedWeather
 import artnest.weathery.view.ForecastListFragmentUI
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.support.v4.act

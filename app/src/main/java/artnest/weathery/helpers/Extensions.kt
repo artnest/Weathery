@@ -3,15 +3,19 @@ package artnest.weathery.helpers
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import artnest.weathery.R
 import artnest.weathery.model.data.CurrentWeatherInfo
 import artnest.weathery.model.data.WeatherInfo
 import artnest.weathery.model.data.WeatherInfoDetails
-import artnest.weathery.model.gson.CurrentWeather
-import artnest.weathery.model.gson.WeatherForecastElement
+import artnest.weathery.model.gson.Weather.CurrentWeather
+import artnest.weathery.model.gson.Weather.WeatherForecastElement
 import com.squareup.picasso.Picasso
 
 fun ViewGroup.inflate(layoutRes: Int) = LayoutInflater.from(context).inflate(layoutRes, this, false)
-fun ImageView.loadUrl(url: String) = Picasso.with(context).load(url).into(this)
+fun ImageView.loadUrl(url: String) = Picasso.with(context)
+        .load(url)
+        .placeholder(R.drawable.empty_weather)
+        .into(this)
 
 fun Double.format(digits: Int) = String.format("%.${digits}f", this)
 

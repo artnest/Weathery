@@ -7,7 +7,7 @@ import android.widget.TextView
 import artnest.weathery.R
 import artnest.weathery.helpers.loadUrl
 import artnest.weathery.model.data.WeatherInfo
-import artnest.weathery.model.gson.WeatherForecastElement
+import artnest.weathery.model.gson.Weather.WeatherForecastElement
 import org.jetbrains.anko.find
 
 class ForecastCardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -1,5 +1,6 @@
 package artnest.weathery.controller.fragments
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -8,12 +9,14 @@ import android.view.ViewGroup
 import artnest.weathery.App
 import artnest.weathery.R
 import artnest.weathery.adapters.MarkerAdapter
+import artnest.weathery.controller.activities.ForecastActivity
 import artnest.weathery.helpers.Common
 import artnest.weathery.helpers.inflate
 import artnest.weathery.model.data.Cities
-import artnest.weathery.model.gson.CurrentWeather
+import artnest.weathery.model.gson.Weather.CurrentWeather
 import co.metalab.asyncawait.async
 import co.metalab.asyncawait.awaitSuccessful
+import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.MapView
@@ -33,9 +36,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
     private lateinit var mMap: GoogleMap
     private val markers = mutableMapOf<String, LatLng>()
 
-    companion object {
-        lateinit var mWeather: CurrentWeather
-    }
+    lateinit var mWeather: CurrentWeather
+    lateinit var mBitmap: Bitmap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +84,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         mMap.isMyLocationEnabled = true  // TODO request permission
 
         mMap.setOnMarkerClickListener(this)
-        mMap.setInfoWindowAdapter(MarkerAdapter(ctx))
+        mMap.setInfoWindowAdapter(MarkerAdapter(ctx, this))
         markers.entries.forEach { e ->
             mMap.addMarker(MarkerOptions().position(e.value).title(e.key))
         }
@@ -95,8 +97,30 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
             val weather = awaitSuccessful(App.openWeather
                     .getCurrentForecast(Cities.valueOf(marker.title).id))
             mWeather = weather
-            // TODO fetch city picture
-            // TODO fetch weather and city picture in async
+
+            val places = awaitSuccessful(App.googlePlaces
+                    .getNearbyPlaces(marker.position.latitude, marker.position.longitude))
+            if (places.results.isNotEmpty()) {
+                await {
+                    val result = Places.GeoDataApi
+                            .getPlacePhotos((act as ForecastActivity)
+                                    .googleApiClient,
+                                    places.results[0].placeId)
+                            .await()
+
+                    if (result != null && result.status.isSuccess) {
+                        val photoMetadataBuffer = result.photoMetadata
+                        if (photoMetadataBuffer.count > 0) {
+                            val photo = photoMetadataBuffer[0]
+                            mBitmap = photo.getPhoto((act as ForecastActivity).googleApiClient)
+                                    .await()
+                                    .bitmap
+                        }
+                        photoMetadataBuffer.release()
+                    }
+                }
+            }
+
             marker.showInfoWindow()
         }.onError {
             toast(Common.getErrorMessage(it.cause!!))

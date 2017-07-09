@@ -1,7 +1,7 @@
-package artnest.weathery.helpers
+package artnest.weathery.helpers.OpenWeatherApi
 
-import artnest.weathery.model.gson.CurrentWeather
-import artnest.weathery.model.gson.ExtendedWeather
+import artnest.weathery.model.gson.Weather.CurrentWeather
+import artnest.weathery.model.gson.Weather.ExtendedWeather
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

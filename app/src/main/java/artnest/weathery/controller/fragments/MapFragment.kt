@@ -3,7 +3,6 @@ package artnest.weathery.controller.fragments
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -40,7 +39,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private val markers = mutableMapOf<String, LatLng>()
 
     lateinit var mWeather: CurrentWeather
-    var mBitmap: Bitmap? = null
 
     val REQUEST_IMAGE_CAPTURE = 1
 
@@ -144,7 +142,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     if (storageDir != null) {
                         val photo = Common.getLastModifiedFile(storageDir)
                         if (photo != null) {
-                            Common.saveScaledBitmap(photo.absolutePath)
+                            val displayMetrics = Common.getDisplayMetrics(ctx)
+                            Common.saveScaledBitmap(photo.absolutePath,
+                                    displayMetrics.widthPixels / 3, displayMetrics.heightPixels / 4)
                         }
                         toast("Photo was saved")
                     }
@@ -162,7 +162,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(deviceLocation))
         } else {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(markers[Cities.Minsk.name]))
-            mMap.uiSettings.isMyLocationButtonEnabled = false
+            // mMap.uiSettings.isMyLocationButtonEnabled = false
         }
     }
 }

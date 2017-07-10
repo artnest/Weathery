@@ -2,6 +2,7 @@ package artnest.weathery.adapters
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.os.Build
@@ -42,7 +43,9 @@ class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
         OnInfoWindowCloseListener {
 
     private lateinit var item: CurrentWeatherInfo
+    private var mBitmap: Bitmap? = null
     private var permissionsGranted = false
+    private val displayMetrics = Common.getDisplayMetrics(mapOwner.ctx)
 
     override fun onMarkerClick(marker: Marker): Boolean {
         mapOwner.toast("Please wait, loading forecast...")
@@ -67,11 +70,11 @@ class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
                             val photoMetadataBuffer = result.photoMetadata
                             if (photoMetadataBuffer.count > 0) {
                                 val photo = photoMetadataBuffer[0]
-                                mapOwner.mBitmap = photo
-                                        .getScaledPhoto(
-                                                (mapOwner.act as ForecastActivity).googleApiClient,
-                                                800, 600
-                                        )
+                                mBitmap = photo.getScaledPhoto(
+                                        (mapOwner.act as ForecastActivity).googleApiClient,
+                                        displayMetrics.widthPixels / 2,
+                                        displayMetrics.heightPixels / 4
+                                )
                                         .await()
                                         .bitmap
                             }
@@ -83,7 +86,7 @@ class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
 
             marker.showInfoWindow()
         }.onError {
-            mapOwner.toast(Common.getErrorMessage(it.cause!!))
+            mapOwner.toast(Common.getErrorMessage(it.cause))
         }
         return true
     }
@@ -124,8 +127,8 @@ class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
                     if (cityPhoto?.exists() ?: false) {
                         imageBitmap = BitmapFactory.decodeFile(cityPhoto!!.absolutePath)
                     } else {
-                        if (mapOwner.mBitmap != null) {
-                            imageBitmap = mapOwner.mBitmap
+                        if (mBitmap != null) {
+                            imageBitmap = mBitmap
                         } else {
                             imageBitmap = BitmapFactory
                                     .decodeResource(resources, R.drawable.empty_photo)
@@ -196,7 +199,7 @@ class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
                     textSize = 14f
                 }.lparams {
                     bottomOf(R.id.info_main)
-                    rightMargin = dip(24)
+                    rightMargin = dip(16)
                 }
 
                 textView {
@@ -331,7 +334,7 @@ class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
     }
 
     override fun onInfoWindowClose(marker: Marker) {
-        mapOwner.mBitmap = null
+        mBitmap = null
     }
 
     fun dispatchTakePictureIntent(cityName: String) {

@@ -64,7 +64,7 @@ class ForecastCardsViewAdapter(val fr: ForecastCardsFragment,
             fr.forecastCardsFragmentUI.etv.visibility = View.GONE
             notifyDataSetChanged()
         }.onError {
-            fr.toast(Common.getErrorMessage(it.cause!!))
+            fr.toast(Common.getErrorMessage(it.cause))
         }
     }
 }

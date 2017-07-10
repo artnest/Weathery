@@ -1,6 +1,7 @@
 package artnest.weathery.adapters
 
 import android.graphics.Typeface
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -60,9 +61,11 @@ class ForecastDayAdapter(fact: ForecastDayActivity) : BaseAdapter() {
                     text = item.desc
                     textSize = 14f
                     setTypeface(typeface, Typeface.ITALIC)
+                    ellipsize = TextUtils.TruncateAt.END
+                    maxLines = 1
                 }.lparams {
-                    alignParentRight()
-                    bottomOf(R.id.card_initial_data)
+                    alignParentLeft()
+                    bottomOf(R.id.card_temperature)
                 }
 
                 textView {
@@ -71,7 +74,7 @@ class ForecastDayAdapter(fact: ForecastDayActivity) : BaseAdapter() {
                     textSize = 14f
                 }.lparams {
                     alignParentLeft()
-                    bottomOf(R.id.card_temperature)
+                    bottomOf(R.id.card_description)
                 }
 
                 textView {
@@ -79,8 +82,8 @@ class ForecastDayAdapter(fact: ForecastDayActivity) : BaseAdapter() {
                     text = item.clouds
                     textSize = 14f
                 }.lparams {
-                    alignParentRight()
-                    bottomOf(R.id.card_temperature)
+                    alignParentLeft()
+                    bottomOf(R.id.card_wind)
                 }
 
                 textView {
@@ -89,7 +92,7 @@ class ForecastDayAdapter(fact: ForecastDayActivity) : BaseAdapter() {
                     textSize = 14f
                 }.lparams {
                     alignParentLeft()
-                    bottomOf(R.id.card_wind)
+                    bottomOf(R.id.card_clouds)
                 }
 
                 textView {

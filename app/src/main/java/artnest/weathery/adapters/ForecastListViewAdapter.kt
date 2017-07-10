@@ -125,7 +125,7 @@ class ForecastListViewAdapter(val fr: ForecastListFragment) : BaseAdapter() {
             fr.forecastListFragmentUI.tb.title = weather.city.name
             notifyDataSetChanged()
         }.onError {
-            fr.toast(Common.getErrorMessage(it.cause!!))
+            fr.toast(Common.getErrorMessage(it.cause))
         }
     }
 }

@@ -4,9 +4,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
+import android.util.DisplayMetrics
 import co.metalab.asyncawait.RetrofitHttpError
 import khronos.toDate
 import khronos.toString
+import org.jetbrains.anko.windowManager
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -37,7 +39,7 @@ object Common {
 
     fun getPlaceLocation(lan: Double, lon: Double) = "$lan,$lon"
 
-    fun getErrorMessage(it: Throwable) =
+    fun getErrorMessage(it: Throwable?) =
             if (it is RetrofitHttpError) {
                 val httpErrorCode = it.errorResponse.code()
                 val errorResponse = it.errorResponse.message()
@@ -98,5 +100,11 @@ object Common {
         val bitmap = BitmapFactory.decodeFile(photoPath, bmOptions)
         val fileOutputStream = FileOutputStream(photoPath)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+    }
+
+    fun getDisplayMetrics(ctx: Context): DisplayMetrics {
+        val displayMetrics = DisplayMetrics()
+        ctx.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics
     }
 }

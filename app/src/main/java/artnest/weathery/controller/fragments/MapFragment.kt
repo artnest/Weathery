@@ -10,12 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import artnest.weathery.R
 import artnest.weathery.adapters.MarkerAdapter
-import artnest.weathery.controller.activities.ForecastActivity
 import artnest.weathery.helpers.Common
 import artnest.weathery.helpers.inflate
 import artnest.weathery.model.data.Cities
 import artnest.weathery.model.gson.Weather.CurrentWeather
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -69,7 +67,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             override fun onPermissionGranted(response: PermissionGrantedResponse) {
                 mMap.isMyLocationEnabled = true
                 mMap.uiSettings.isMyLocationButtonEnabled = true
-                getDeviceLocation()
             }
 
             override fun onPermissionDenied(response: PermissionDeniedResponse) {
@@ -150,19 +147,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
             }
-        }
-    }
-
-    fun getDeviceLocation() {
-        val mLastKnownLocation = LocationServices.FusedLocationApi
-                .getLastLocation((act as ForecastActivity).googleApiClient)
-
-        if (mLastKnownLocation != null) {
-            val deviceLocation = LatLng(mLastKnownLocation.latitude, mLastKnownLocation.longitude)
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(deviceLocation))
-        } else {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(markers[Cities.Minsk.name]))
-            // mMap.uiSettings.isMyLocationButtonEnabled = false
         }
     }
 }

@@ -28,10 +28,10 @@ class ForecastDayCardsActivityUI : AnkoComponent<ForecastDayCardsActivity> {
             }.lparams {
                 width = matchParent
 
-                val styledAttributes = ctx.theme.obtainStyledAttributes(
-                        intArrayOf(android.R.attr.actionBarSize))
-                height = styledAttributes.getDimension(
-                        0, 56 * ctx.resources.displayMetrics.density).toInt()
+                val styledAttributes = ctx.theme
+                        .obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
+                height = styledAttributes
+                        .getDimension(0, 56 * ctx.resources.displayMetrics.density).toInt()
                 styledAttributes.recycle()
             }
 
@@ -47,11 +47,7 @@ class ForecastDayCardsActivityUI : AnkoComponent<ForecastDayCardsActivity> {
 
             rv = recyclerView {
                 id = R.id.recycler_view
-                if (configuration.portrait) {
-                    layoutManager = GridLayoutManager(ctx, 2)
-                } else {
-                    layoutManager = GridLayoutManager(ctx, 3)
-                }
+                layoutManager = GridLayoutManager(ctx, if (configuration.portrait) 2 else 3)
                 setHasFixedSize(true)
                 adapter = ForecastDayCardsAdapter(owner)
             }.lparams {

@@ -9,7 +9,6 @@ import artnest.weathery.view.ForecastActivityUI
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.places.Places
 import org.jetbrains.anko.setContentView
 
@@ -26,7 +25,6 @@ class ForecastActivity : AppCompatActivity(), OnConnectionFailedListener {
 
         googleApiClient = GoogleApiClient
                 .Builder(this)
-                .addApi(LocationServices.API)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)

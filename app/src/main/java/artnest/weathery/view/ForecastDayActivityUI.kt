@@ -19,17 +19,16 @@ class ForecastDayActivityUI : AnkoComponent<ForecastDayActivity> {
         relativeLayout {
             tb = toolbar {
                 id = R.id.toolbar
-                backgroundColor = ContextCompat.getColor(ctx, R.color.colorAccent)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     elevation = 4 * ctx.resources.displayMetrics.density
                 }
             }.lparams {
                 width = matchParent
 
-                val styledAttributes = ctx.theme.obtainStyledAttributes(
-                        intArrayOf(android.R.attr.actionBarSize))
-                height = styledAttributes.getDimension(
-                        0, 56 * ctx.resources.displayMetrics.density).toInt()
+                val styledAttributes = ctx.theme
+                        .obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
+                height = styledAttributes
+                        .getDimension(0, 56 * ctx.resources.displayMetrics.density).toInt()
                 styledAttributes.recycle()
             }
 

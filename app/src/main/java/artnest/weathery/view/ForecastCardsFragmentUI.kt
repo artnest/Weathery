@@ -1,6 +1,5 @@
 package artnest.weathery.view
 
-import android.content.res.ColorStateList
 import android.os.Build
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
@@ -33,17 +32,16 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
         relativeLayout {
             tb = toolbar {
                 id = R.id.toolbar
-                backgroundColor = ContextCompat.getColor(ctx, R.color.colorAccent)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     elevation = 4 * ctx.resources.displayMetrics.density
                 }
             }.lparams {
                 width = matchParent
 
-                val styledAttributes = ctx.theme.obtainStyledAttributes(
-                        intArrayOf(android.R.attr.actionBarSize))
-                height = styledAttributes.getDimension(
-                        0, 56 * ctx.resources.displayMetrics.density).toInt()
+                val styledAttributes = ctx.theme
+                        .obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
+                height = styledAttributes
+                        .getDimension(0, 56 * ctx.resources.displayMetrics.density).toInt()
                 styledAttributes.recycle()
             }
 
@@ -87,8 +85,6 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
 
             fab = floatingActionButton {
                 imageResource = R.drawable.ic_globe
-                backgroundTintList = ColorStateList
-                        .valueOf(ContextCompat.getColor(ctx, R.color.colorPrimary))
 
                 onClick {
                     val cities = mutableListOf<String>()

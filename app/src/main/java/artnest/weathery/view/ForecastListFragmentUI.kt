@@ -28,7 +28,6 @@ class ForecastListFragmentUI : AnkoComponent<ForecastListFragment> {
             tb = toolbar {
                 id = R.id.toolbar
                 backgroundColor = ContextCompat.getColor(ctx, R.color.colorAccent)
-                setTitleTextColor(ContextCompat.getColor(ctx, android.R.color.white))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     elevation = 4 * ctx.resources.displayMetrics.density
                 }
@@ -74,8 +73,8 @@ class ForecastListFragmentUI : AnkoComponent<ForecastListFragment> {
 
             fab = floatingActionButton {
                 imageResource = R.drawable.ic_globe
-                backgroundTintList = ColorStateList.valueOf(
-                        ContextCompat.getColor(ctx, R.color.colorPrimary))
+                backgroundTintList = ColorStateList
+                        .valueOf(ContextCompat.getColor(ctx, R.color.colorPrimary))
 
                 /*val icon = AppCompatResources.getDrawable(ctx, R.drawable.ic_globe)!!
                 val newIcon = icon.constantState.newDrawable()

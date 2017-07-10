@@ -24,6 +24,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def project = variant.applicationId
+            def SEPARATOR = "_"
+            def buildType = variant.variantData.variantConfiguration.buildType.name
+            def version = variant.versionName
+
+            def newApkName = project + SEPARATOR +
+                    buildType + SEPARATOR +
+                    version +
+                    ".apk"
+
+            output.outputFile = new File(output.outputFile.parent, newApkName)
+        }
+    }
 }
 
 dependencies {

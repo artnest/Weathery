@@ -20,7 +20,6 @@ class ForecastDayActivityUI : AnkoComponent<ForecastDayActivity> {
             tb = toolbar {
                 id = R.id.toolbar
                 backgroundColor = ContextCompat.getColor(ctx, R.color.colorAccent)
-                setTitleTextColor(ContextCompat.getColor(ctx, android.R.color.white))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     elevation = 4 * ctx.resources.displayMetrics.density
                 }

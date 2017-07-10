@@ -15,8 +15,6 @@ class ForecastActivityUI : AnkoComponent<ForecastActivity> {
 
     override fun createView(ui: AnkoContext<ForecastActivity>) = with(ui) {
         frameLayout {
-            id = R.id.fragment_container
-
             pager = viewPager {
                 id = R.id.view_pager
                 adapter = ViewPagerAdapter(owner.supportFragmentManager)

@@ -1,8 +1,10 @@
 package artnest.weathery.adapters
 
+import android.Manifest
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
@@ -21,6 +23,11 @@ import co.metalab.asyncawait.awaitSuccessful
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.GoogleMap.*
 import com.google.android.gms.maps.model.Marker
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.ctx
@@ -35,6 +42,7 @@ class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
         OnInfoWindowCloseListener {
 
     private lateinit var item: CurrentWeatherInfo
+    private var permissionsGranted = false
 
     override fun onMarkerClick(marker: Marker): Boolean {
         mapOwner.toast("Please wait, loading forecast...")
@@ -236,47 +244,89 @@ class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
     }
 
     override fun onInfoWindowClick(marker: Marker) {
-        with(mapOwner.ctx) {
-            alert {
-                title = item.name
-                message = getString(R.string.take_photo_message)
-
-                positiveButton(R.string.take_photo_positive_button) {
-                    val cityPhoto = Common.getCityPhotoFile(this@with, marker.title)
-                    if (cityPhoto?.exists() ?: false) {
-                        cityPhoto!!.delete()
+        val permissionsListener = object : MultiplePermissionsListener {
+            override fun onPermissionsChecked(report: MultiplePermissionsReport) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    if (report.grantedPermissionResponses.find { response ->
+                        response.permissionName == Manifest.permission.CAMERA
+                    } != null) {
+                        permissionsGranted = true
                     }
-                    marker.hideInfoWindow()
-                    dispatchTakePictureIntent(marker.title)
+                } else {
+                    if (report.areAllPermissionsGranted()) {
+                        permissionsGranted = true
+                    }
                 }
 
-                cancelButton {
+                if (permissionsGranted) {
+                    with(mapOwner.ctx) {
+                        alert {
+                            title = item.name
+                            message = getString(R.string.take_photo_message)
+
+                            positiveButton(R.string.take_photo_positive_button) {
+                                val cityPhoto = Common.getCityPhotoFile(this@with, marker.title)
+                                if (cityPhoto?.exists() ?: false) {
+                                    cityPhoto!!.delete()
+                                }
+                                marker.hideInfoWindow()
+                                dispatchTakePictureIntent(marker.title)
+                            }
+
+                            cancelButton {
+                            }
+                        }.show()
+                    }
                 }
-            }.show()
+            }
+
+            override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>,
+                                                            token: PermissionToken) {
+                with(mapOwner.ctx) {
+                    alert {
+                        title = getString(R.string.camera_storage_permissions)
+                        message = getString(R.string.camera_storage_permissions_message_rationale)
+
+                        okButton {
+                        }
+                    }.show()
+                    token.cancelPermissionRequest()
+                }
+            }
         }
+
+        Dexter.withActivity(mapOwner.act)
+                .withPermissions(
+                        Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ).withListener(permissionsListener)
+                .check()
     }
 
     override fun onInfoWindowLongClick(marker: Marker) {
-        with(mapOwner.ctx) {
-            val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            val cityPhoto = File(storageDir, "${marker.title}.jpg")
-            if (cityPhoto.exists()) {
-                alert {
-                    title = item.name
-                    message = getString(R.string.remove_photo_message)
+        if (permissionsGranted) {
+            with(mapOwner.ctx) {
+                val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                val cityPhoto = File(storageDir, "${marker.title}.jpg")
+                if (cityPhoto.exists()) {
+                    alert {
+                        title = item.name
+                        message = getString(R.string.remove_photo_message)
 
-                    positiveButton(getString(R.string.remove_photo_positive_button)) {
-                        cityPhoto.delete()
-                        marker.hideInfoWindow()
-                        toast("Your photo was removed")
-                    }
+                        positiveButton(getString(R.string.remove_photo_positive_button)) {
+                            cityPhoto.delete()
+                            marker.hideInfoWindow()
+                            toast("Your photo was removed")
+                        }
 
-                    cancelButton {
-                    }
-                }.show()
-            } else {
-                toast("No user's photo to remove")
+                        cancelButton {
+                        }
+                    }.show()
+                } else {
+                    toast("No user's photo to remove")
+                }
             }
+        } else {
+            mapOwner.toast("No user's photo to remove")
         }
     }
 

@@ -9,4 +9,10 @@
     <string name="take_photo_positive_button">Take</string>
     <string name="remove_photo_message">Do you want to remove this photo?</string>
     <string name="remove_photo_positive_button">Remove</string>
+    <string name="location_permission">Location permission</string>
+    <string name="location_permission_message_rationale">We need this permission to be able to show your location on the map so please, allow it in the settings!</string>
+    <string name="location_permission_message_denied">Location access in required to show your location</string>
+    <string name="camera_storage_permissions">"Camera and Storage permissions"</string>
+    <string name="camera_storage_permissions_denied">Both camera and storage permission are required to take photos of cities</string>
+    <string name="camera_storage_permissions_message_rationale">We need these permissions to let you take photos of the cities so please, allow them in the settings!</string>
 </resources>

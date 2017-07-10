@@ -50,20 +50,22 @@ dependencies {
     compile "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
     compile "org.jetbrains.anko:anko-recyclerview-v7-coroutines:$anko_version"
 
-    compile "co.metalab.asyncawait:asyncawait:1.0.0"
+    compile 'co.metalab.asyncawait:asyncawait:1.0.0'
 
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    compile "com.squareup.picasso:picasso:2.5.2"
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
     compile "com.chibatching.kotpref:kotpref:$kotpref_version"
     compile "com.chibatching.kotpref:initializer:$kotpref_version"
 
-    compile "com.github.hotchemi:khronos:0.9.0"
+    compile 'com.github.hotchemi:khronos:0.9.0'
 
     compile "com.google.android.gms:play-services-location:$play_services_version"
     compile "com.google.android.gms:play-services-maps:$play_services_version"
     compile "com.google.android.gms:play-services-places:$play_services_version"
+
+    compile 'com.karumi:dexter:4.1.0'
 }
 
 repositories {

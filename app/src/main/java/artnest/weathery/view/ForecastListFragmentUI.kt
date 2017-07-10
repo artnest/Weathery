@@ -77,6 +77,11 @@ class ForecastListFragmentUI : AnkoComponent<ForecastListFragment> {
                 backgroundTintList = ColorStateList.valueOf(
                         ContextCompat.getColor(ctx, R.color.colorPrimary))
 
+                /*val icon = AppCompatResources.getDrawable(ctx, R.drawable.ic_globe)!!
+                val newIcon = icon.constantState.newDrawable()
+                newIcon.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+                setImageDrawable(newIcon)*/
+
                 onClick {
                     val cities = mutableListOf<String>()
                     Cities.values().toList().forEach { c ->

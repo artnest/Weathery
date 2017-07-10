@@ -32,6 +32,7 @@ class ForecastCardsFragmentUI : AnkoComponent<ForecastCardsFragment> {
         relativeLayout {
             tb = toolbar {
                 id = R.id.toolbar
+                backgroundColor = ContextCompat.getColor(ctx, R.color.colorPrimary)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     elevation = 4 * ctx.resources.displayMetrics.density
                 }

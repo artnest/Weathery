@@ -267,7 +267,7 @@ class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
                             title = item.name
                             message = getString(R.string.take_photo_message)
 
-                            positiveButton(R.string.take_photo_positive_button) {
+                            yesButton {
                                 val cityPhoto = Common.getCityPhotoFile(this@with, marker.title)
                                 if (cityPhoto?.exists() ?: false) {
                                     cityPhoto!!.delete()
@@ -315,7 +315,7 @@ class MarkerAdapter(val mapOwner: MapFragment) : OnMarkerClickListener,
                         title = item.name
                         message = getString(R.string.remove_photo_message)
 
-                        positiveButton(getString(R.string.remove_photo_positive_button)) {
+                        yesButton {
                             cityPhoto.delete()
                             marker.hideInfoWindow()
                             toast("Your photo was removed")
